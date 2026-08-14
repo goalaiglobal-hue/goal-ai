@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goal AI — Plan • Focus • Achieve</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #071426, #111c3d);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      margin: 0 auto 25px;
+      background: linear-gradient(135deg, #4f7cff, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 800;
+      box-shadow: 0 0 35px rgba(90, 120, 255, 0.35);
+    }
+
+    h1 {
+      font-size: 52px;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .tagline {
+      font-size: 20px;
+      opacity: 0.8;
+      margin-bottom: 35px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 22px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      margin-bottom: 25px;
+    }
+
+    .card h2 {
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      opacity: 0.75;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #5b7cff;
+      color: white;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #b9c7ff;
+    }
+
+    footer {
+      margin-top: 25px;
+      opacity: 0.5;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <div class="logo">AI</div>
+
+    <h1>GOAL AI</h1>
+
+    <div class="tagline">
+      Plan • Focus • Achieve
+    </div>
+
+    <section class="card">
+      <h2>Your Goals. Your Focus. Your Future.</h2>
+
+      <p>
+        Goal AI is being built to help you plan your goals,
+        stay focused, track progress, and move forward with
+        intelligent AI guidance.
+      </p>
+
+      <div class="buttons">
+        <button onclick="createGoal()">Create Goal</button>
+        <button onclick="showProgress()">Track Progress</button>
+        <button onclick="aiCoach()">AI Coach</button>
+      </div>
+
+      <div id="message"></div>
+    </section>
+
+    <footer>
+      © 2026 Goal AI
+    </footer>
+
+  </main>
+
+  <script>
+    function createGoal() {
+      document.getElementById("message").textContent =
+        "🎯 Goal creation module coming next.";
+    }
+
+    function showProgress() {
+      document.getElementById("message").textContent =
+        "📈 Progress tracking module coming next.";
+    }
+
+    function aiCoach() {
+      document.getElementById("message").textContent =
+        "🤖 AI Coach module coming next.";
+    }
+  </script>
+
+</body>
+</html>
