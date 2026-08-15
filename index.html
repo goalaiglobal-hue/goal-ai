@@ -182,11 +182,7 @@ label{
   border:1px solid rgba(91,124,255,.25);
   border-radius:15px;
   line-height:1.6;
-}
-
-.empty{
-  opacity:.65;
-  padding:15px;
+  min-height:70px;
 }
 
 footer{
@@ -295,9 +291,7 @@ Cancel
 
 <h2>🤖 AI Coach</h2>
 
-<p>
-Your personal goal coach.
-</p>
+<p>Your personal goal coach.</p>
 
 <div class="coach-box" id="coachMessage">
 Create a goal first and I'll help you stay focused.
@@ -323,7 +317,11 @@ Create a goal first and I'll help you stay focused.
 
 <script>
 
-let goals = JSON.parse(localStorage.getItem("goalAI_goals")) || [];
+let goals = JSON.parse(
+  localStorage.getItem("goalAI_goals")
+) || [];
+
+let adviceIndex = 0;
 
 
 function saveData(){
@@ -419,6 +417,7 @@ function renderGoals(){
   const list =
   document.getElementById("goalList");
 
+
   if(goals.length===0){
 
     list.innerHTML=
@@ -497,13 +496,17 @@ function changeProgress(id,amount){
 
   if(!goal) return;
 
+
   goal.progress += amount;
+
 
   if(goal.progress<0)
     goal.progress=0;
 
+
   if(goal.progress>100)
     goal.progress=100;
+
 
   saveData();
 
@@ -555,6 +558,7 @@ function updateCoach(){
 
   const box=document.getElementById("coachMessage");
 
+
   if(goals.length===0){
 
     box.textContent=
@@ -565,10 +569,10 @@ function updateCoach(){
   }
 
 
-  const average=
-  Math.round(
-    goals.reduce((sum,g)=>sum+g.progress,0)
-    /goals.length
+  const average=Math.round(
+    goals.reduce(
+      (sum,g)=>sum+g.progress,0
+    ) / goals.length
   );
 
 
@@ -602,7 +606,60 @@ function updateCoach(){
 
 function getAdvice(){
 
-  updateCoach();
+  const box =
+  document.getElementById("coachMessage");
+
+
+  if(goals.length===0){
+
+    box.textContent=
+    "🎯 Create your first goal and I'll help you build a plan.";
+
+    return;
+
+  }
+
+
+  const average=Math.round(
+    goals.reduce(
+      (sum,g)=>sum+g.progress,0
+    ) / goals.length
+  );
+
+
+  const adviceList = [
+
+    "💡 Focus on one small action today. Consistency is more important than trying to do everything at once.",
+
+    "🔥 You're making progress. Keep your daily momentum going and don't stop because of a small setback.",
+
+    "🎯 Break your goal into smaller tasks. Completing one task at a time makes big goals easier.",
+
+    "💪 Stay consistent. Even a little progress every day can create a big result over time.",
+
+    "🚀 Review your goal today and decide the single most important action you can complete next."
+
+  ];
+
+
+  if(average>=100){
+
+    box.textContent=
+    "🏆 Incredible! You've completed your goal. Now choose a new challenge and keep growing.";
+
+    return;
+
+  }
+
+
+  box.textContent=
+  adviceList[adviceIndex % adviceList.length]
+  + "  📊 Current progress: "
+  + average
+  + "%";
+
+
+  adviceIndex++;
 
 }
 
