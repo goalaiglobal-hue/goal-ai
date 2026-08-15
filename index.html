@@ -1,167 +1,626 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Goal AI — Plan • Focus • Achieve</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goal AI — Plan • Focus • Achieve</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
 
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #071426, #111c3d);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 24px;
-    }
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#061226,#111c3d);
+  color:white;
+  padding:24px 16px 40px;
+}
 
-    .container {
-      width: 100%;
-      max-width: 900px;
-      text-align: center;
-    }
+.container{
+  width:100%;
+  max-width:900px;
+  margin:auto;
+  text-align:center;
+}
 
-    .logo {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      margin: 0 auto 25px;
-      background: linear-gradient(135deg, #4f7cff, #8b5cf6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      font-weight: 800;
-      box-shadow: 0 0 35px rgba(90, 120, 255, 0.35);
-    }
+.logo{
+  width:90px;
+  height:90px;
+  margin:10px auto 20px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#4f7cff,#8b5cf6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  font-weight:800;
+  box-shadow:0 0 35px rgba(90,120,255,.4);
+}
 
-    h1 {
-      font-size: 52px;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
-    }
+h1{
+  font-size:clamp(38px,9vw,58px);
+  letter-spacing:2px;
+}
 
-    .tagline {
-      font-size: 20px;
-      opacity: 0.8;
-      margin-bottom: 35px;
-    }
+.tagline{
+  margin-top:8px;
+  margin-bottom:30px;
+  font-size:18px;
+  opacity:.75;
+}
 
-    .card {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 22px;
-      padding: 30px;
-      backdrop-filter: blur(12px);
-      margin-bottom: 25px;
-    }
+.card{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:22px;
+  padding:25px 18px;
+  backdrop-filter:blur(12px);
+  margin-bottom:20px;
+}
 
-    .card h2 {
-      margin-bottom: 12px;
-    }
+.card h2{
+  margin-bottom:12px;
+}
 
-    .card p {
-      opacity: 0.75;
-      line-height: 1.6;
-    }
+.card p{
+  opacity:.75;
+  line-height:1.6;
+}
 
-    .buttons {
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 25px;
-    }
+.buttons{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:25px;
+}
 
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 14px 24px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      background: #5b7cff;
-      color: white;
-    }
+button{
+  border:0;
+  border-radius:12px;
+  padding:14px 20px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  background:#5b7cff;
+  color:white;
+}
 
-    button:hover {
-      transform: translateY(-2px);
-    }
+button:active{
+  transform:scale(.97);
+}
 
-    #message {
-      margin-top: 20px;
-      font-size: 16px;
-      color: #b9c7ff;
-    }
+.secondary{
+  background:#273659;
+}
 
-    footer {
-      margin-top: 25px;
-      opacity: 0.5;
-      font-size: 13px;
-    }
-  </style>
+.goal-area{
+  display:none;
+  margin-top:20px;
+  text-align:left;
+}
+
+input,select{
+  width:100%;
+  padding:14px;
+  margin:8px 0 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.2);
+  background:#101d38;
+  color:white;
+  font-size:16px;
+}
+
+label{
+  font-size:14px;
+  opacity:.8;
+}
+
+.goal-card{
+  text-align:left;
+  margin-top:15px;
+  padding:18px;
+  border-radius:16px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.goal-title{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.progress-box{
+  margin-top:14px;
+}
+
+.progress{
+  height:10px;
+  background:#263452;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#4f7cff,#8b5cf6);
+  transition:.3s;
+}
+
+.progress-controls{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.progress-controls button{
+  flex:1;
+  padding:10px;
+}
+
+#message{
+  margin-top:18px;
+  color:#b9c7ff;
+  line-height:1.5;
+}
+
+#progressSection,
+#coachSection{
+  display:none;
+}
+
+.coach-box{
+  margin-top:15px;
+  padding:18px;
+  background:rgba(91,124,255,.12);
+  border:1px solid rgba(91,124,255,.25);
+  border-radius:15px;
+  line-height:1.6;
+}
+
+.empty{
+  opacity:.65;
+  padding:15px;
+}
+
+footer{
+  margin-top:30px;
+  opacity:.45;
+  font-size:13px;
+}
+</style>
 </head>
 
 <body>
 
-  <main class="container">
+<main class="container">
 
-    <div class="logo">AI</div>
+<div class="logo">AI</div>
 
-    <h1>GOAL AI</h1>
+<h1>GOAL AI</h1>
 
-    <div class="tagline">
-      Plan • Focus • Achieve
-    </div>
+<div class="tagline">
+Plan • Focus • Achieve
+</div>
 
-    <section class="card">
-      <h2>Your Goals. Your Focus. Your Future.</h2>
+<section class="card">
 
-      <p>
-        Goal AI is being built to help you plan your goals,
-        stay focused, track progress, and move forward with
-        intelligent AI guidance.
-      </p>
+<h2>Your Goals. Your Focus. Your Future.</h2>
 
-      <div class="buttons">
-        <button onclick="createGoal()">Create Goal</button>
-        <button onclick="showProgress()">Track Progress</button>
-        <button onclick="aiCoach()">AI Coach</button>
+<p>
+Set your goal, track your progress and get simple AI-powered guidance.
+</p>
+
+<div class="buttons">
+
+<button onclick="openGoalForm()">
+🎯 Create Goal
+</button>
+
+<button class="secondary" onclick="showProgress()">
+📊 Track Progress
+</button>
+
+<button class="secondary" onclick="showCoach()">
+🤖 AI Coach
+</button>
+
+</div>
+
+<div id="message"></div>
+
+<div id="goalArea" class="goal-area">
+
+<h3>Create Your Goal</h3>
+
+<label>Goal name</label>
+
+<input
+id="goalName"
+type="text"
+placeholder="Example: Learn English"
+/>
+
+<label>Target date</label>
+
+<input
+id="goalDate"
+type="date"
+/>
+
+<label>Category</label>
+
+<select id="goalCategory">
+<option>Study</option>
+<option>Career</option>
+<option>Business</option>
+<option>Fitness</option>
+<option>Money</option>
+<option>Personal</option>
+</select>
+
+<div class="buttons">
+
+<button onclick="saveGoal()">
+💾 Save Goal
+</button>
+
+<button class="secondary" onclick="closeGoalForm()">
+Cancel
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section id="progressSection" class="card">
+
+<h2>📊 Your Progress</h2>
+
+<div id="goalList"></div>
+
+</section>
+
+
+<section id="coachSection" class="card">
+
+<h2>🤖 AI Coach</h2>
+
+<p>
+Your personal goal coach.
+</p>
+
+<div class="coach-box" id="coachMessage">
+Create a goal first and I'll help you stay focused.
+</div>
+
+<div class="buttons">
+
+<button onclick="getAdvice()">
+✨ Get Advice
+</button>
+
+</div>
+
+</section>
+
+
+<footer>
+© 2026 Goal AI • Plan • Focus • Achieve
+</footer>
+
+</main>
+
+
+<script>
+
+let goals = JSON.parse(localStorage.getItem("goalAI_goals")) || [];
+
+
+function saveData(){
+
+  localStorage.setItem(
+    "goalAI_goals",
+    JSON.stringify(goals)
+  );
+
+}
+
+
+function openGoalForm(){
+
+  document.getElementById("goalArea").style.display="block";
+
+  document.getElementById("message").textContent=
+  "🎯 Tell Goal AI what you want to achieve.";
+
+  document.getElementById("progressSection").style.display="none";
+
+  document.getElementById("coachSection").style.display="none";
+
+  document.getElementById("goalName").focus();
+
+}
+
+
+function closeGoalForm(){
+
+  document.getElementById("goalArea").style.display="none";
+
+}
+
+
+function saveGoal(){
+
+  const name =
+  document.getElementById("goalName").value.trim();
+
+  const date =
+  document.getElementById("goalDate").value;
+
+  const category =
+  document.getElementById("goalCategory").value;
+
+
+  if(!name){
+
+    document.getElementById("message").textContent=
+    "⚠️ Please enter your goal name.";
+
+    return;
+
+  }
+
+
+  const goal={
+
+    id:Date.now(),
+
+    name:name,
+
+    date:date,
+
+    category:category,
+
+    progress:0
+
+  };
+
+
+  goals.push(goal);
+
+  saveData();
+
+  document.getElementById("goalName").value="";
+
+  document.getElementById("goalDate").value="";
+
+  document.getElementById("goalArea").style.display="none";
+
+  document.getElementById("message").textContent=
+  "✅ Goal saved successfully!";
+
+  renderGoals();
+
+}
+
+
+function renderGoals(){
+
+  const list =
+  document.getElementById("goalList");
+
+  if(goals.length===0){
+
+    list.innerHTML=
+    '<div class="empty">No goals yet. Create your first goal 🎯</div>';
+
+    return;
+
+  }
+
+
+  list.innerHTML="";
+
+
+  goals.forEach(goal=>{
+
+    const card=document.createElement("div");
+
+    card.className="goal-card";
+
+
+    card.innerHTML=`
+
+      <div class="goal-title">
+        ${escapeHTML(goal.name)}
       </div>
 
-      <div id="message"></div>
-    </section>
+      <div>
+        ${escapeHTML(goal.category)}
+        ${goal.date ? " • Target: "+goal.date : ""}
+      </div>
 
-    <footer>
-      © 2026 Goal AI
-    </footer>
+      <div class="progress-box">
 
-  </main>
+        <div style="margin-bottom:6px;">
+          Progress: <b>${goal.progress}%</b>
+        </div>
 
-  <script>
-    function createGoal() {
-      document.getElementById("message").textContent =
-        "🎯 Goal creation module coming next.";
-    }
+        <div class="progress">
+          <div
+            class="progress-bar"
+            style="width:${goal.progress}%">
+          </div>
+        </div>
 
-    function showProgress() {
-      document.getElementById("message").textContent =
-        "📈 Progress tracking module coming next.";
-    }
+        <div class="progress-controls">
 
-    function aiCoach() {
-      document.getElementById("message").textContent =
-        "🤖 AI Coach module coming next.";
-    }
-  </script>
+          <button onclick="changeProgress(${goal.id},-10)">
+            −10
+          </button>
+
+          <button onclick="changeProgress(${goal.id},10)">
+            +10
+          </button>
+
+          <button onclick="deleteGoal(${goal.id})">
+            🗑️
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    list.appendChild(card);
+
+  });
+
+}
+
+
+function changeProgress(id,amount){
+
+  const goal=goals.find(g=>g.id===id);
+
+  if(!goal) return;
+
+  goal.progress += amount;
+
+  if(goal.progress<0)
+    goal.progress=0;
+
+  if(goal.progress>100)
+    goal.progress=100;
+
+  saveData();
+
+  renderGoals();
+
+}
+
+
+function deleteGoal(id){
+
+  goals=goals.filter(g=>g.id!==id);
+
+  saveData();
+
+  renderGoals();
+
+}
+
+
+function showProgress(){
+
+  document.getElementById("goalArea").style.display="none";
+
+  document.getElementById("coachSection").style.display="none";
+
+  document.getElementById("progressSection").style.display="block";
+
+  document.getElementById("message").textContent="";
+
+  renderGoals();
+
+}
+
+
+function showCoach(){
+
+  document.getElementById("goalArea").style.display="none";
+
+  document.getElementById("progressSection").style.display="none";
+
+  document.getElementById("coachSection").style.display="block";
+
+  updateCoach();
+
+}
+
+
+function updateCoach(){
+
+  const box=document.getElementById("coachMessage");
+
+  if(goals.length===0){
+
+    box.textContent=
+    "🎯 Start by creating your first goal.";
+
+    return;
+
+  }
+
+
+  const average=
+  Math.round(
+    goals.reduce((sum,g)=>sum+g.progress,0)
+    /goals.length
+  );
+
+
+  if(average===0){
+
+    box.textContent=
+    "🚀 Your goals are ready. Take the first small step today.";
+
+  }
+  else if(average<50){
+
+    box.textContent=
+    "💪 Keep going! Small progress every day can move you closer to your goal.";
+
+  }
+  else if(average<100){
+
+    box.textContent=
+    "🔥 You're doing great! Stay consistent and finish strong.";
+
+  }
+  else{
+
+    box.textContent=
+    "🏆 Amazing! You've completed your goals. Set a bigger challenge.";
+
+  }
+
+}
+
+
+function getAdvice(){
+
+  updateCoach();
+
+}
+
+
+function escapeHTML(text){
+
+  const div=document.createElement("div");
+
+  div.textContent=text;
+
+  return div.innerHTML;
+
+}
+
+
+renderGoals();
+
+</script>
 
 </body>
 </html>
