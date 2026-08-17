@@ -787,6 +787,21 @@ function deleteDailyTask(id){
   saveDailyTasks();
   renderDailyTasks();
   }
+  function getDaysRemaining(date){
+  if(!date) return "";
+  const today = new Date();
+  const target = new Date(date);
+  today.setHours(0,0,0,0);
+  target.setHours(0,0,0,0);
+
+  const diff = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+
+  if(diff < 0) return "⚠️ Deadline passed";
+  if(diff === 0) return "🔥 Deadline is today";
+  if(diff === 1) return "⏳ 1 day remaining";
+
+  return "⏳ " + diff + " days remaining";
+  }
 function escapeHTML(text){
 
   const div=document.createElement("div");
