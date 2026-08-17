@@ -459,7 +459,9 @@ function renderGoals(){
       <div class="goal-title">
         ${escapeHTML(goal.name)}
       </div>
-
+<div style="margin-top:6px; font-size:14px; opacity:.8;">
+  ${goal.date ? "⏳ Target: " + goal.date : "📅 No deadline set"}
+</div>
       <div>
         ${escapeHTML(goal.category)}
         ${goal.date ? " • Target: "+goal.date : ""}
