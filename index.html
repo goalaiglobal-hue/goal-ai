@@ -360,7 +360,8 @@ function openGoalForm(){
   document.getElementById("progressSection").style.display="none";
 
   document.getElementById("coachSection").style.display="none";
-
+document.getElementById("goalDate").value =
+new Date().toISOString().split("T")[0];
   document.getElementById("goalName").focus();
 
 }
