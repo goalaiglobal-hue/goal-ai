@@ -184,7 +184,36 @@ label{
   line-height:1.6;
   min-height:70px;
 }
+#roadmapSection{
+  margin-top:20px;
+}
 
+.roadmap-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:12px;
+  padding:14px;
+  border-radius:12px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.roadmap-item input{
+  width:20px;
+  height:20px;
+  margin:0;
+}
+
+.roadmap-item span{
+  flex:1;
+  line-height:1.5;
+}
+
+.roadmap-done{
+  text-decoration:line-through;
+  opacity:.55;
+}
 footer{
   margin-top:30px;
   opacity:.45;
@@ -814,6 +843,42 @@ function escapeHTML(text){
 
 renderGoals();
 renderDailyTasks();
+  function generateRoadmap(){
+  const roadmapList = document.getElementById("roadmapList");
+
+  if (!roadmapList) return;
+
+  if (goals.length === 0) {
+    roadmapList.innerHTML =
+      "<p>Please create a goal first.</p>";
+    return;
+  }
+
+  roadmapList.innerHTML = "";
+
+  const steps = [
+    "Clearly define your goal and expected result.",
+    "Break the goal into small and achievable tasks.",
+    "Choose the most important task and start today.",
+    "Track your progress every day.",
+    "Review your progress at the end of each week.",
+    "Improve your plan based on your results.",
+    "Complete the final step and achieve your goal."
+  ];
+
+  steps.forEach((step, index) => {
+    const item = document.createElement("div");
+    item.className = "roadmap-item";
+
+    item.innerHTML = `
+      <input type="checkbox"
+        onchange="this.parentElement.classList.toggle('roadmap-done', this.checked)">
+      <span>Step ${index + 1}: ${step}</span>
+    `;
+
+    roadmapList.appendChild(item);
+  });
+  }
 </script>
 
 </body>
