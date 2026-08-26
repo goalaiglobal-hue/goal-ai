@@ -770,6 +770,7 @@ function addDailyTask(){
 }
 function renderDailyTasks(){
   const list = document.getElementById("dailyTaskList");
+
   if (!list) return;
 
   const goal = goals.length ? goals[goals.length - 1] : null;
@@ -780,22 +781,25 @@ function renderDailyTasks(){
   }
 
   const category =
-    document.getElementById("goalCategory")?.value || goal.category || "Personal";
+    document.getElementById("goalCategory")?.value ||
+    goal.category ||
+    "Personal";
 
   const level =
-    document.getElementById("currentLevel")?.value || "beginner";
+    document.getElementById("currentLevel")?.value ||
+    "beginner";
 
   const time =
-    document.getElementById("dailyTime")?.value || "30";
+    document.getElementById("dailyTime")?.value ||
+    "30";
 
-  const goalName =
-    goal.name || goal.goal || "your goal";
+  const goalName = goal.name || goal.goal || "Your Goal";
 
   const goalKey = goalName + "|" + category + "|" + level + "|" + time;
   const savedKey = localStorage.getItem("goalAI_dailyGoalKey");
 
   if (savedKey !== goalKey) {
-    let tasks;
+    let tasks = [];
 
     if (category === "Study") {
       tasks = [
@@ -838,10 +842,14 @@ function renderDailyTasks(){
   dailyTasks.forEach(task => {
     const item = document.createElement("div");
 
+    item.className = "daily-task";
+
     item.innerHTML = `
-      <input type="checkbox"
+      <input
+        type="checkbox"
         ${task.done ? "checked" : ""}
-        onchange="toggleDailyTask(${task.id})">
+        onchange="toggleDailyTask(${task.id})"
+      >
       <span>${task.text}</span>
     `;
 
