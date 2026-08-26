@@ -879,23 +879,54 @@ renderDailyTasks();
 
   if (!roadmapList) return;
 
-  if (goals.length === 0) {
-    roadmapList.innerHTML =
-      "<p>Please create a goal first.</p>";
+  if (typeof goals === "undefined" || goals.length === 0) {
+    roadmapList.innerHTML = "<p>Please create a goal first.</p>";
     return;
   }
 
-  roadmapList.innerHTML = "";
+  const latestGoal = goals[goals.length - 1] || {};
+
+  const goal =
+    latestGoal.title ||
+    latestGoal.name ||
+    latestGoal.goal ||
+    latestGoal.goalName ||
+    latestGoal.text ||
+    "Your Goal";
+
+  const category =
+    document.getElementById("goalCategory")?.value || "Personal";
+
+  const level =
+    document.getElementById("currentLevel")?.value || "beginner";
+
+  const dailyTime =
+    document.getElementById("dailyTime")?.value || "30";
+
+  const levelName = {
+    beginner: "Beginner",
+    intermediate: "Intermediate",
+    advanced: "Advanced"
+  }[level] || "Beginner";
+
+  const timeName = {
+    "30": "30 minutes",
+    "60": "1 hour",
+    "120": "2 hours",
+    "180": "3+ hours"
+  }[dailyTime] || "30 minutes";
 
   const steps = [
-    "Clearly define your goal and expected result.",
-    "Break the goal into small and achievable tasks.",
-    "Choose the most important task and start today.",
-    "Track your progress every day.",
-    "Review your progress at the end of each week.",
-    "Improve your plan based on your results.",
-    "Complete the final step and achieve your goal."
+    `Understand your goal: ${goal}`,
+    `Learn the basics of ${category} at ${levelName} level.`,
+    `Spend ${timeName} every day on focused practice.`,
+    `Break ${goal} into small weekly milestones.`,
+    `Complete one important action every day and track it.`,
+    `Review your progress every week and improve your plan.`,
+    `Reach your target and create the next growth milestone.`
   ];
+
+  roadmapList.innerHTML = "";
 
   steps.forEach((step, index) => {
     const item = document.createElement("div");
