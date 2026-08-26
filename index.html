@@ -768,75 +768,87 @@ function addDailyTask(){
   saveDailyTasks();
   renderDailyTasks();
 }
-
 function renderDailyTasks(){
+  const list = document.getElementById("dailyTaskList");
+  if (!list) return;
 
-  const list =
-    document.getElementById("dailyTaskList");
+  const goal = goals.length ? goals[goals.length - 1] : null;
 
-  if(!list) return;
-
-  if(dailyTasks.length === 0){
-
-    list.innerHTML =
-      "<p>🎯 Add your first action for today.</p>";
-
+  if (!goal) {
+    list.innerHTML = "<p>🎯 Create a goal first.</p>";
     return;
+  }
+
+  const category =
+    document.getElementById("goalCategory")?.value || goal.category || "Personal";
+
+  const level =
+    document.getElementById("currentLevel")?.value || "beginner";
+
+  const time =
+    document.getElementById("dailyTime")?.value || "30";
+
+  const goalName =
+    goal.name || goal.goal || "your goal";
+
+  const goalKey = goalName + "|" + category + "|" + level + "|" + time;
+  const savedKey = localStorage.getItem("goalAI_dailyGoalKey");
+
+  if (savedKey !== goalKey) {
+    let tasks;
+
+    if (category === "Study") {
+      tasks = [
+        "Learn 10 important points about " + goalName + " — 10 minutes",
+        "Practice " + goalName + " with a simple exercise — 10 minutes",
+        "Review what you learned today — 10 minutes"
+      ];
+    } else if (category === "Business") {
+      tasks = [
+        "Learn one important concept about " + goalName + " — 10 minutes",
+        "Study one real example — 10 minutes",
+        "Write one action you can take today — 10 minutes"
+      ];
+    } else if (category === "Career") {
+      tasks = [
+        "Learn one skill related to " + goalName + " — 10 minutes",
+        "Practice that skill — 10 minutes",
+        "Review your progress — 10 minutes"
+      ];
+    } else {
+      tasks = [
+        "Work on " + goalName + " — 10 minutes",
+        "Complete one small task — 10 minutes",
+        "Review your progress — 10 minutes"
+      ];
+    }
+
+    dailyTasks = tasks.map((text, index) => ({
+      id: Date.now() + index,
+      text: text,
+      done: false
+    }));
+
+    localStorage.setItem("goalAI_dailyGoalKey", goalKey);
+    saveDailyTasks();
   }
 
   list.innerHTML = "";
 
   dailyTasks.forEach(task => {
-
-    const item =
-      document.createElement("div");
-
-    item.style.cssText =
-      "display:flex;align-items:center;gap:10px;margin-top:12px;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);";
+    const item = document.createElement("div");
 
     item.innerHTML = `
-
-      <input
-        type="checkbox"
+      <input type="checkbox"
         ${task.done ? "checked" : ""}
-        onchange="toggleDailyTask(${task.id})"
-        style="width:20px;height:20px;margin:0;"
-      >
-
-      <span style="
-        flex:1;
-        text-decoration:${task.done ? "line-through" : "none"};
-        opacity:${task.done ? ".5" : "1"};
-      ">
-        ${escapeHTML(task.text)}
-      </span>
-
-      <button
-        onclick="deleteDailyTask(${task.id})"
-        style="padding:8px 10px;"
-      >
-        🗑️
-      </button>
-
+        onchange="toggleDailyTask(${task.id})">
+      <span>${task.text}</span>
     `;
 
     list.appendChild(item);
-
   });
 }
 
-function toggleDailyTask(id){
-
-  const task =
-    dailyTasks.find(t => t.id === id);
-
-  if(!task) return;
-
-  task.done = !task.done;
-
-  saveDailyTasks();
-  renderDailyTasks();
-}
 
 function deleteDailyTask(id){
 
