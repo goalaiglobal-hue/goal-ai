@@ -954,7 +954,7 @@ renderDailyTasks();
 
     item.innerHTML = `
       <input type="checkbox"
-        onchange="this.parentElement.classList.toggle('roadmap-done', this.checked)">
+        onchange="this.nextElementSibling.style.textDecoration = this.checked ? 'line-through' : 'none'; this.nextElementSibling.style.opacity = this.checked ? '0.6' : '1';"
       <span>Step ${index + 1}: ${step}</span>
     `;
 
