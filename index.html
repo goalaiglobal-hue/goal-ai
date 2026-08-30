@@ -895,6 +895,7 @@ function escapeHTML(text){
 renderGoals();
 renderDailyTasks();
   function generateRoadmap(){
+
   const roadmapList = document.getElementById("roadmapList");
 
   if (!roadmapList) return;
@@ -923,6 +924,9 @@ renderDailyTasks();
   const dailyTime =
     document.getElementById("dailyTime")?.value || "30";
 
+  const goalText = goal.toLowerCase();
+  const categoryText = category.toLowerCase();
+
   const levelName = {
     beginner: "Beginner",
     intermediate: "Intermediate",
@@ -936,55 +940,285 @@ renderDailyTasks();
     "180": "3+ hours"
   }[dailyTime] || "30 minutes";
 
-  const goalText = goal.toLowerCase();
+  let steps = [];
 
-let steps;
+  /* =========================
+     AI ROADMAP
+  ========================= */
 
-if (goalText.includes("ai") || goalText.includes("artificial intelligence")) {
-  steps = [
-    `Understand the basics of Artificial Intelligence.`,
-    `Learn how AI, machine learning, and generative AI work.`,
-    `Learn effective prompting and practice with AI tools.`,
-    `Build a small AI-based project.`,
-    `Test your project and improve it step by step.`,
-    `Review your progress and strengthen your weak areas.`,
-    `Complete a final AI project and define your next AI milestone.`
-  ];
-} else if (goalText.includes("english")) {
-  steps = [
-    `Learn basic English vocabulary and common phrases.`,
-    `Practice basic grammar and sentence formation.`,
-    `Practice listening and speaking every day.`,
-    `Read simple English content regularly.`,
-    `Write short sentences and daily notes.`,
-    `Review mistakes and improve your weak areas.`,
-    `Complete a final English practice test and set your next milestone.`
-  ];
-} else {
-  steps = [
-    `Clearly understand your goal: ${goal}.`,
-    `Learn the basic concepts of ${category} at ${levelName} level.`,
-    `Create a simple daily practice routine of ${timeName}.`,
-    `Break your goal into small weekly milestones.`,
-    `Practice consistently and track your progress.`,
-    `Review your progress and improve your weak areas.`,
-    `Complete your goal and define your next milestone.`
-  ];
-}
+  if (
+    goalText.includes("ai") ||
+    goalText.includes("artificial intelligence") ||
+    goalText.includes("machine learning")
+  ) {
+
+    steps = [
+      `Understand the basics of Artificial Intelligence.`,
+      `Learn how AI, Machine Learning and Generative AI work.`,
+      `Learn effective prompting and practice with AI tools.`,
+      `Build a small AI-based project.`,
+      `Test your project and improve it step by step.`,
+      `Review your progress and strengthen weak areas.`,
+      `Complete your AI project and define your next AI milestone.`
+    ];
+
+  }
+
+  /* =========================
+     CODING / PROGRAMMING
+  ========================= */
+
+  else if (
+    goalText.includes("coding") ||
+    goalText.includes("programming") ||
+    goalText.includes("javascript") ||
+    goalText.includes("python") ||
+    goalText.includes("web development") ||
+    goalText.includes("app")
+  ) {
+
+    steps = [
+      `Understand the basics of ${goal}.`,
+      `Learn the important concepts and syntax.`,
+      `Practice with small coding exercises.`,
+      `Build a simple beginner project.`,
+      `Debug your project and fix common mistakes.`,
+      `Build a more complete real-world project.`,
+      `Complete your project and choose your next coding milestone.`
+    ];
+
+  }
+
+  /* =========================
+     ENGLISH / LANGUAGE
+  ========================= */
+
+  else if (
+    goalText.includes("english") ||
+    goalText.includes("language") ||
+    goalText.includes("speaking") ||
+    goalText.includes("communication")
+  ) {
+
+    steps = [
+      `Learn basic vocabulary and important phrases.`,
+      `Practice basic grammar and sentence formation.`,
+      `Practice listening and speaking every day.`,
+      `Read simple English content regularly.`,
+      `Write short sentences and daily notes.`,
+      `Review mistakes and improve weak areas.`,
+      `Complete a final ${goal} practice challenge.`
+    ];
+
+  }
+
+  /* =========================
+     STUDY / EXAM
+  ========================= */
+
+  else if (
+    categoryText.includes("study") ||
+    goalText.includes("exam") ||
+    goalText.includes("learn") ||
+    goalText.includes("study")
+  ) {
+
+    steps = [
+      `Understand exactly what you need to achieve with ${goal}.`,
+      `Learn the basic concepts and important topics.`,
+      `Create a focused ${timeName} daily study routine.`,
+      `Practice important questions and exercises.`,
+      `Review mistakes and strengthen weak topics.`,
+      `Take a practice test and measure your progress.`,
+      `Complete your ${goal} target and plan the next milestone.`
+    ];
+
+  }
+
+  /* =========================
+     JOB / CAREER
+  ========================= */
+
+  else if (
+    categoryText.includes("job") ||
+    categoryText.includes("career") ||
+    goalText.includes("job") ||
+    goalText.includes("career") ||
+    goalText.includes("government")
+  ) {
+
+    steps = [
+      `Understand the requirements and target of ${goal}.`,
+      `Identify the skills and knowledge you need.`,
+      `Create a ${timeName} daily preparation routine.`,
+      `Practice important skills and real questions.`,
+      `Track your weak areas and improve them.`,
+      `Take mock tests or practical challenges.`,
+      `Complete your preparation and move toward your final ${goal} target.`
+    ];
+
+  }
+
+  /* =========================
+     BUSINESS
+  ========================= */
+
+  else if (
+    categoryText.includes("business") ||
+    goalText.includes("business") ||
+    goalText.includes("startup") ||
+    goalText.includes("shop")
+  ) {
+
+    steps = [
+      `Define your business goal and target customer.`,
+      `Research the market and understand the competition.`,
+      `Choose your product, service or business model.`,
+      `Create a simple plan and start testing your idea.`,
+      `Measure results and improve what is not working.`,
+      `Build a repeatable system for growth.`,
+      `Reach your first major business milestone and plan the next one.`
+    ];
+
+  }
+
+  /* =========================
+     CONTENT / YOUTUBE
+  ========================= */
+
+  else if (
+    goalText.includes("youtube") ||
+    goalText.includes("instagram") ||
+    goalText.includes("content") ||
+    goalText.includes("creator")
+  ) {
+
+    steps = [
+      `Define your content goal and target audience.`,
+      `Choose your niche and create a clear content strategy.`,
+      `Learn the basics of scripting, editing and thumbnails.`,
+      `Publish your first consistent set of content.`,
+      `Track views, engagement and audience response.`,
+      `Improve your content using the data you collect.`,
+      `Build a repeatable content system and set your next growth milestone.`
+    ];
+
+  }
+
+  /* =========================
+     FITNESS / RUNNING
+  ========================= */
+
+  else if (
+    goalText.includes("fitness") ||
+    goalText.includes("running") ||
+    goalText.includes("run") ||
+    goalText.includes("exercise")
+  ) {
+
+    steps = [
+      `Understand your ${goal} target and current starting point.`,
+      `Create a safe and realistic practice routine.`,
+      `Build consistency with regular practice.`,
+      `Gradually improve your performance.`,
+      `Track your progress every week.`,
+      `Review your results and adjust your routine.`,
+      `Reach your target and set your next milestone.`
+    ];
+
+  }
+
+  /* =========================
+     MONEY / SAVING
+  ========================= */
+
+  else if (
+    goalText.includes("money") ||
+    goalText.includes("saving") ||
+    goalText.includes("income") ||
+    goalText.includes("earn")
+  ) {
+
+    steps = [
+      `Define exactly how much you want to achieve.`,
+      `Understand your current situation and available resources.`,
+      `Learn the basic skills needed to reach your target.`,
+      `Create a realistic daily or weekly action plan.`,
+      `Start taking consistent practical actions.`,
+      `Track your results and improve your strategy.`,
+      `Reach your target and create your next financial milestone.`
+    ];
+
+  }
+
+  /* =========================
+     DEFAULT SMART ROADMAP
+  ========================= */
+
+  else {
+
+    steps = [
+      `Clearly define what you want to achieve with ${goal}.`,
+      `Learn the important basics required for your goal.`,
+      `Create a focused ${timeName} daily routine.`,
+      `Break ${goal} into small weekly milestones.`,
+      `Practice consistently and track your progress.`,
+      `Review your progress and improve your weak areas.`,
+      `Reach your ${goal} target and define your next milestone.`
+    ];
+
+  }
+
+  /* =========================
+     ADD LEVEL PERSONALIZATION
+  ========================= */
+
+  if (level === "advanced") {
+
+    steps[1] = `Master advanced concepts related to ${goal}.`;
+    steps[3] = `Build a challenging real-world project or practical solution.`;
+    steps[5] = `Analyze your results and optimize your strategy.`;
+
+  }
+
+  if (level === "intermediate") {
+
+    steps[1] = `Strengthen your core knowledge and important skills for ${goal}.`;
+    steps[3] = `Complete an intermediate practical project or challenge.`;
+
+  }
+
+  /* =========================
+     RENDER ROADMAP
+  ========================= */
+
   roadmapList.innerHTML = "";
 
   steps.forEach((step, index) => {
+
     const item = document.createElement("div");
+
     item.className = "roadmap-item";
 
     item.innerHTML = `
-      <input type="checkbox"
-        onchange="this.nextElementSibling.style.textDecoration = this.checked ? 'line-through' : 'none'; this.nextElementSibling.style.opacity = this.checked ? '0.6' : '1';"
-      <span>Step ${index + 1}: ${step}</span>
+      <label style="display:flex;align-items:center;gap:10px;width:100%;">
+        <input
+          type="checkbox"
+          onchange="
+            this.parentElement.parentElement.classList.toggle(
+              'roadmap-done',
+              this.checked
+            )
+          "
+        >
+        <span>Step ${index + 1}: ${escapeHTML(step)}</span>
+      </label>
     `;
 
     roadmapList.appendChild(item);
+
   });
+
   }
 </script>
 
