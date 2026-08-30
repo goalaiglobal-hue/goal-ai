@@ -633,51 +633,79 @@ function showCoach(){
 
 function updateCoach(){
 
-  const box=document.getElementById("coachMessage");
+  const box = document.getElementById("coachMessage");
 
-
-  if(goals.length===0){
-
-    box.textContent=
-    "🎯 Start by creating your first goal.";
-
+  if(!goals || goals.length === 0){
+    box.textContent = "🎯 Start by creating your first goal.";
     return;
-
   }
 
+  const goal = goals[goals.length - 1] || {};
 
-  const average=Math.round(
-    goals.reduce(
-      (sum,g)=>sum+g.progress,0
-    ) / goals.length
+  const goalName =
+    goal.title ||
+    goal.name ||
+    goal.goal ||
+    goal.goalName ||
+    "your goal";
+
+  const category =
+    document.getElementById("goalCategory")?.value || "Personal";
+
+  const level =
+    document.getElementById("currentLevel")?.value || "beginner";
+
+  const dailyTime =
+    document.getElementById("dailyTime")?.value || "30";
+
+  const progress = Math.round(
+    Number(goal.progress || 0)
   );
 
+  let message = "";
 
-  if(average===0){
+  if(progress === 0){
 
-    box.textContent=
-    "🚀 Your goals are ready. Take the first small step today.";
+    message =
+      `🤖 AI Coach\n\n` +
+      `🎯 Your goal: ${goalName}\n` +
+      `📚 Category: ${category}\n` +
+      `📈 Level: ${level}\n` +
+      `⏱️ Daily time: ${dailyTime} minutes\n\n` +
+      `Your roadmap is ready. Start with the first small step today. ` +
+      `Don't try to finish everything at once.`;
 
+  } else if(progress < 50){
+
+    message =
+      `🤖 AI Coach\n\n` +
+      `🎯 Goal: ${goalName}\n` +
+      `📊 Progress: ${progress}%\n\n` +
+      `💪 You're building momentum!\n` +
+      `Keep working consistently for ${dailyTime} minutes every day. ` +
+      `Focus on one important task at a time.`;
+
+  } else if(progress < 100){
+
+    message =
+      `🤖 AI Coach\n\n` +
+      `🔥 Goal: ${goalName}\n` +
+      `📊 Progress: ${progress}%\n\n` +
+      `Excellent work! You're more than halfway there. ` +
+      `Stay consistent, complete your remaining roadmap steps, ` +
+      `and keep tracking your progress.`;
+
+  } else {
+
+    message =
+      `🤖 AI Coach\n\n` +
+      `🏆 Congratulations!\n\n` +
+      `You completed: ${goalName}\n\n` +
+      `You've achieved this goal. Now choose your next milestone ` +
+      `and keep growing. 🚀`;
   }
-  else if(average<50){
 
-    box.textContent=
-    "💪 Keep going! Small progress every day can move you closer to your goal.";
-
-  }
-  else if(average<100){
-
-    box.textContent=
-    "🔥 You're doing great! Stay consistent and finish strong.";
-
-  }
-  else{
-
-    box.textContent=
-    "🏆 Amazing! You've completed your goals. Set a bigger challenge.";
-
-  }
-
+  box.textContent = message;
 }
 
 
