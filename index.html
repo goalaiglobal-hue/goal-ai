@@ -937,15 +937,14 @@ renderDailyTasks();
   }[dailyTime] || "30 minutes";
 
   const steps = [
-    `Understand your goal: ${goal}`,
-    `Learn the basics of ${category} at ${levelName} level.`,
-    `Spend ${timeName} every day on focused practice.`,
-    `Break ${goal} into small weekly milestones.`,
-    `Complete one important action every day and track it.`,
-    `Review your progress every week and improve your plan.`,
-    `Reach your target and create the next growth milestone.`
-  ];
-
+  `Understand your goal: ${goal}`,
+  `Learn the basics of ${category} at ${levelName} level.`,
+  `Spend ${timeName} every day on focused practice.`,
+  `Break ${goal} into small weekly milestones.`,
+  `Complete one important action every day and track it.`,
+  `Review your progress every week and improve your plan.`,
+  `Reach your target and create the next growth milestone.`
+];
   roadmapList.innerHTML = "";
 
   steps.forEach((step, index) => {
