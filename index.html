@@ -936,15 +936,41 @@ renderDailyTasks();
     "180": "3+ hours"
   }[dailyTime] || "30 minutes";
 
-  const steps = [
-  `Understand your goal: ${goal}`,
-  `Learn the basics of ${category} at ${levelName} level.`,
-  `Spend ${timeName} every day on focused practice.`,
-  `Break ${goal} into small weekly milestones.`,
-  `Complete one important action every day and track it.`,
-  `Review your progress every week and improve your plan.`,
-  `Reach your target and create the next growth milestone.`
-];
+  const goalText = goal.toLowerCase();
+
+let steps;
+
+if (goalText.includes("ai") || goalText.includes("artificial intelligence")) {
+  steps = [
+    `Understand the basics of Artificial Intelligence.`,
+    `Learn how AI, machine learning, and generative AI work.`,
+    `Learn effective prompting and practice with AI tools.`,
+    `Build a small AI-based project.`,
+    `Test your project and improve it step by step.`,
+    `Review your progress and strengthen your weak areas.`,
+    `Complete a final AI project and define your next AI milestone.`
+  ];
+} else if (goalText.includes("english")) {
+  steps = [
+    `Learn basic English vocabulary and common phrases.`,
+    `Practice basic grammar and sentence formation.`,
+    `Practice listening and speaking every day.`,
+    `Read simple English content regularly.`,
+    `Write short sentences and daily notes.`,
+    `Review mistakes and improve your weak areas.`,
+    `Complete a final English practice test and set your next milestone.`
+  ];
+} else {
+  steps = [
+    `Clearly understand your goal: ${goal}.`,
+    `Learn the basic concepts of ${category} at ${levelName} level.`,
+    `Create a simple daily practice routine of ${timeName}.`,
+    `Break your goal into small weekly milestones.`,
+    `Practice consistently and track your progress.`,
+    `Review your progress and improve your weak areas.`,
+    `Complete your goal and define your next milestone.`
+  ];
+}
   roadmapList.innerHTML = "";
 
   steps.forEach((step, index) => {
