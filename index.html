@@ -711,61 +711,62 @@ function updateCoach(){
 
 function getAdvice(){
 
-  const box =
-  document.getElementById("coachMessage");
+  const box = document.getElementById("coachMessage");
 
-
-  if(goals.length===0){
-
-    box.textContent=
-    "🎯 Create your first goal and I'll help you build a plan.";
-
+  if(goals.length === 0){
+    box.textContent =
+      "🎯 Create your first goal and I'll help you build a clear plan.";
     return;
-
   }
 
+  const goal = goals[goals.length - 1];
 
-  const average=Math.round(
-    goals.reduce(
-      (sum,g)=>sum+g.progress,0
-    ) / goals.length
-  );
+  const goalName =
+    goal.title ||
+    goal.name ||
+    goal.goal ||
+    goal.goalName ||
+    goal.text ||
+    "your goal";
 
+  const progress = Math.round(goal.progress || 0);
 
-  const adviceList = [
+  const level =
+    document.getElementById("currentLevel")?.value || "beginner";
 
-    "💡 Focus on one small action today. Consistency is more important than trying to do everything at once.",
+  const dailyTime =
+    document.getElementById("dailyTime")?.value || "30";
 
-    "🔥 You're making progress. Keep your daily momentum going and don't stop because of a small setback.",
+  let advice = "";
 
-    "🎯 Break your goal into smaller tasks. Completing one task at a time makes big goals easier.",
+  if(progress === 0){
 
-    "💪 Stay consistent. Even a little progress every day can create a big result over time.",
+    advice =
+      `🎯 Start small with "${goalName}". ` +
+      `You are at 0%, so complete your first task today. ` +
+      `⏱️ Use your ${dailyTime} minutes wisely.`;
 
-    "🚀 Review your goal today and decide the single most important action you can complete next."
+  } else if(progress < 50){
 
-  ];
+    advice =
+      `🚀 Good start! Your progress is ${progress}%. ` +
+      `Keep working on "${goalName}" one small step at a time. ` +
+      `📈 Consistency matters more than speed.`;
 
+  } else if(progress < 100){
 
-  if(average>=100){
+    advice =
+      `🔥 You're doing great! You're already ${progress}% through "${goalName}". ` +
+      `Don't stop now. Focus on the next important step and keep going.`;
 
-    box.textContent=
-    "🏆 Incredible! You've completed your goal. Now choose a new challenge and keep growing.";
+  } else {
 
-    return;
-
+    advice =
+      `🏆 Amazing! You've completed "${goalName}". ` +
+      `Take a moment to review what you learned, then choose your next milestone.`;
   }
 
-
-  box.textContent=
-  adviceList[adviceIndex % adviceList.length]
-  + "  📊 Current progress: "
-  + average
-  + "%";
-
-
-  adviceIndex++;
-
+  box.textContent = `🤖 AI Coach\n\n${advice}`;
 }
 
 let dailyTasks = JSON.parse(
