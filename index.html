@@ -1221,32 +1221,52 @@ renderDailyTasks();
      RENDER ROADMAP
   ========================= */
 
-  roadmapList.innerHTML = "";
+  const roadmapKey = "goalAI_roadmapDone_" + goal;
 
-  steps.forEach((step, index) => {
+let roadmapDone = JSON.parse(
+  localStorage.getItem(roadmapKey) || "[]"
+);
 
-    const item = document.createElement("div");
+roadmapList.innerHTML = "";
 
-    item.className = "roadmap-item";
+steps.forEach((step, index) => {
 
-    item.innerHTML = `
-      <label style="display:flex;align-items:center;gap:10px;width:100%;">
-        <input
-          type="checkbox"
-          onchange="
-            this.parentElement.parentElement.classList.toggle(
-              'roadmap-done',
-              this.checked
-            )
-          "
-        >
-        <span>Step ${index + 1}: ${escapeHTML(step)}</span>
-      </label>
-    `;
+  const item = document.createElement("div");
 
-    roadmapList.appendChild(item);
+  item.className = "roadmap-item";
 
+  item.innerHTML = `
+    <label style="display:flex;align-items:center;gap:10px;width:100%;">
+      <input type="checkbox">
+      <span>Step ${index + 1}: ${escapeHTML(step)}</span>
+    </label>
+  `;
+
+  const checkbox = item.querySelector('input[type="checkbox"]');
+
+  checkbox.checked = roadmapDone[index] === true;
+
+  if (checkbox.checked) {
+    item.classList.add("roadmap-done");
+  }
+
+  checkbox.addEventListener("change", function () {
+
+    roadmapDone[index] = this.checked;
+
+    localStorage.setItem(
+      roadmapKey,
+      JSON.stringify(roadmapDone)
+    );
+
+    item.classList.toggle(
+      "roadmap-done",
+      this.checked
+    );
   });
+
+  roadmapList.appendChild(item);
+});
 
   }
 </script>
