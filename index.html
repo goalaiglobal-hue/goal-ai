@@ -769,9 +769,23 @@ function getAdvice(){
   box.textContent = `🤖 AI Coach\n\n${advice}`;
 }
 
+function getTodayDate(){
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
+}
+
+const todayDate = getTodayDate();
+const savedDailyTasksDate = localStorage.getItem("goalAI_dailyTasksDate");
+
 let dailyTasks = JSON.parse(
   localStorage.getItem("goalAI_dailyTasks")
 ) || [];
+
+if(savedDailyTasksDate !== todayDate){
+  dailyTasks = [];
+  localStorage.setItem("goalAI_dailyTasksDate", todayDate);
+  localStorage.setItem("goalAI_dailyTasks", JSON.stringify(dailyTasks));
+}
 
 function saveDailyTasks(){
   localStorage.setItem(
