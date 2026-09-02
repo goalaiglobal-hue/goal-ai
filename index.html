@@ -926,8 +926,8 @@ function renderDailyTasks(){
 
     list.appendChild(item);
   });
-    }
-  toggleDailyTask(id){
+}
+  function toggleDailyTask(id){
   dailyTasks = dailyTasks.map(task =>
     task.id === id ? { ...task, done: !task.done } : task
   );
