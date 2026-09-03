@@ -916,13 +916,14 @@ function renderDailyTasks(){
     item.className = "daily-task";
 
     item.innerHTML = `
-      <input
-        type="checkbox"
-        ${task.done ? "checked" : ""}
-        onchange="toggleDailyTask(${task.id})"
-      >
-      <span>${task.text}</span>
-    `;
+  <input
+    type="checkbox"
+    ${task.done ? "checked" : ""}
+    onchange="toggleDailyTask(${task.id})"
+  >
+  <span>${task.text}</span>
+  <button onclick="deleteDailyTask(${task.id})">🗑️</button>
+`;
 
     list.appendChild(item);
   });
