@@ -1,3 +1,4 @@
+
 {
   "name": "Goal AI",
   "short_name": "Goal AI",
@@ -6,5 +7,16 @@
   "background_color": "#ffffff",
   "theme_color": "#6c5ce7",
   "description": "Turn your goals into clear roadmaps and daily actions.",
-  "icons": []
+  "icons": [
+    {
+      "src": "./goal-ai-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./goal-ai-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
