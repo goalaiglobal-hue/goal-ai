@@ -1,9 +1,11 @@
-const CACHE_NAME = "goal-ai-v1";
+const CACHE_NAME = "goal-ai-v2";
 
 const ASSETS = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./goal-ai-192.png",
+  "./goal-ai-512.png"
 ];
 
 self.addEventListener("install", event => {
