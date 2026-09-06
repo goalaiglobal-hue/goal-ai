@@ -6,17 +6,30 @@
       "src": "goal-ai-192.png",
       "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "goal-ai-512.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "goal-ai-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "goal-ai-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "/goal-ai/",
   "background_color": "#0d1117",
   "theme_color": "#0d1117",
-  "display": "standalone"
+  "display": "standalone",
+  "scope": "/goal-ai/"
 }
