@@ -1,35 +1,22 @@
 {
-  "short_name": "Goal AI",
   "name": "Goal AI",
+  "short_name": "Goal AI",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "description": "Turn your goals into clear roadmaps and daily actions.",
   "icons": [
     {
       "src": "goal-ai-192.png",
-      "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
       "src": "goal-ai-512.png",
-      "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any"
-    },
-    {
-      "src": "goal-ai-192.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "maskable"
-    },
-    {
-      "src": "goal-ai-512.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "maskable"
+      "type": "image/png"
     }
-  ],
-  "start_url": "./index.html",
-  "background_color": "#0d1117",
-  "theme_color": "#0d1117",
-  "display": "standalone",
-  "scope": "./"
+  ]
 }
