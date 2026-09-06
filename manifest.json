@@ -27,9 +27,9 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": "/goal-ai/",
+  "start_url": "./index.html",
   "background_color": "#0d1117",
   "theme_color": "#0d1117",
   "display": "standalone",
-  "scope": "/goal-ai/"
+  "scope": "./"
 }
