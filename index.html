@@ -437,7 +437,53 @@ function closeGoalForm(){
 }
 
 
-8
+function saveGoal(){
+
+  const name =
+  document.getElementById("goalName").value.trim();
+
+  const date =
+  document.getElementById("goalDate").value;
+
+  const today = getTodayDate();
+
+  if(date && date < today){
+    document.getElementById("message").textContent =
+    "⚠️ Target date cannot be in the past.";
+    return;
+  }
+
+  const category =
+  document.getElementById("goalCategory").value;
+
+  if(!name){
+    document.getElementById("message").textContent =
+    "⚠️ Please enter your goal name.";
+    return;
+  }
+
+  const goal = {
+    id: Date.now(),
+    name: name,
+    date: date,
+    category: category,
+    progress: 0
+  };
+
+  goals.push(goal);
+
+  saveData();
+
+  document.getElementById("goalName").value = "";
+  document.getElementById("goalDate").value = "";
+
+  document.getElementById("goalArea").style.display = "none";
+
+  document.getElementById("message").textContent =
+  "✅ Goal saved successfully!";
+
+  renderGoals();
+}
 
   if(goals.length===0){
 
