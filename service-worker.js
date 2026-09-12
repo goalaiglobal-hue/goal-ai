@@ -1,4 +1,4 @@
-const CACHE_NAME = 'goal-ai-v3';
+const CACHE_NAME = 'goal-ai-v4';
 
 const ASSETS = [
   "./",
