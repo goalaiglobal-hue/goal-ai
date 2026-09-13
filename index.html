@@ -474,6 +474,23 @@ function saveGoal(){
 
   saveData();
 
+  fetch("http://127.0.0.1:8001/goals", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      goal: name
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("Flask Backend:", data);
+  })
+  .catch(error => {
+    console.log("Flask connection:", error);
+  });
+
   document.getElementById("goalName").value = "";
   document.getElementById("goalDate").value = "";
 
