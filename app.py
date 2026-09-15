@@ -14,7 +14,7 @@ if not SUPABASE_URL or not SUPABASE_KEY:
         "SUPABASE_URL and SUPABASE_KEY environment variables are required"
     )
 
-GOALS_URL = SUPABASE_URL.rstrip("/") + "/goals"
+GOALS_URL = SUPABASE_URL.rstrip("/") + "/rest/v1/goals"
 
 HEADERS = {
     "apikey": SUPABASE_KEY,
