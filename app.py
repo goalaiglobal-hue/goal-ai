@@ -6,15 +6,20 @@ import requests
 app = Flask(__name__)
 CORS(app)
 
-SUPABASE_URL = os.environ["SUPABASE_URL"]
-SUPABASE_KEY = os.environ["SUPABASE_KEY"]
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+
+if not SUPABASE_URL or not SUPABASE_KEY:
+    raise RuntimeError(
+        "SUPABASE_URL and SUPABASE_KEY environment variables are required"
+    )
+
+GOALS_URL = SUPABASE_URL.rstrip("/") + "/goals"
 
 HEADERS = {
     "apikey": SUPABASE_KEY,
     "Content-Type": "application/json"
 }
-
-GOALS_URL = SUPABASE_URL.rstrip("/") + "/goals"
 
 
 @app.route("/", methods=["GET"])
@@ -26,19 +31,22 @@ def home():
     })
 
 
-@app.route("/goals", methods=["GET"])
+@app.route("/api/goals", methods=["GET"])
 def get_goals():
     response = requests.get(
         GOALS_URL,
         headers=HEADERS,
-        params={"select": "*", "order": "created_at.desc"},
+        params={
+            "select": "*",
+            "order": "created_at.desc"
+        },
         timeout=15
     )
 
     return jsonify(response.json()), response.status_code
 
 
-@app.route("/goals", methods=["POST"])
+@app.route("/api/goals", methods=["POST"])
 def add_goal():
     data = request.get_json(silent=True)
 
@@ -67,7 +75,7 @@ def add_goal():
     return jsonify(response.json()), response.status_code
 
 
-@app.route("/goals/<int:goal_id>", methods=["PATCH"])
+@app.route("/api/goals/<int:goal_id>", methods=["PATCH"])
 def update_goal(goal_id):
     data = request.get_json(silent=True)
 
@@ -100,7 +108,9 @@ def update_goal(goal_id):
             **HEADERS,
             "Prefer": "return=representation"
         },
-        params={"id": f"eq.{goal_id}"},
+        params={
+            "id": f"eq.{goal_id}"
+        },
         json=payload,
         timeout=15
     )
@@ -108,7 +118,7 @@ def update_goal(goal_id):
     return jsonify(response.json()), response.status_code
 
 
-@app.route("/goals/<int:goal_id>", methods=["DELETE"])
+@app.route("/api/goals/<int:goal_id>", methods=["DELETE"])
 def delete_goal(goal_id):
     response = requests.delete(
         GOALS_URL,
@@ -116,7 +126,9 @@ def delete_goal(goal_id):
             **HEADERS,
             "Prefer": "return=representation"
         },
-        params={"id": f"eq.{goal_id}"},
+        params={
+            "id": f"eq.{goal_id}"
+        },
         timeout=15
     )
 
@@ -125,6 +137,7 @@ def delete_goal(goal_id):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
+
     app.run(
         host="0.0.0.0",
         port=port
