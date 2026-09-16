@@ -502,6 +502,7 @@ function saveGoal(){
   renderGoals();
 }
 function renderGoals(){
+  const list = document.getElementById("goalList");
   if(goals.length===0){
 
     list.innerHTML=
