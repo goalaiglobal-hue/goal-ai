@@ -499,8 +499,28 @@ function saveGoal(){
   document.getElementById("message").textContent =
   "✅ Goal saved successfully!";
 
-  renderGoals();
+  loadGoalsFromBackend();
+async function loadGoalsFromBackend() {
+    try {
+        const res = await fetch("https://goal-ai-dw76.onrender.com/api/goals");
+        const data = await res.json();
+        if (data && data.length > 0) {
+            goals = data.map(item => ({
+                id: item.id || Date.now(),
+                name: item.goal || item.name,
+                date: item.target_date || item.date || "",
+                category: item.category || "General",
+                progress: item.progress || 0
+            }));
+            renderGoals();
+        }
+    } catch (err) {
+        console.log("Error loading goals:", err);
+    }
 }
+
+// Page load hote hi live database se load karne ke liye:
+window.addEventListener('DOMContentLoaded', loadGoalsFromBackend);
 function renderGoals(){
   const list = document.getElementById("goalList");
   if(goals.length===0){
