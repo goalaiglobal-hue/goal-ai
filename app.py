@@ -36,15 +36,10 @@ def get_goals():
     response = requests.get(
         GOALS_URL,
         headers=HEADERS,
-        params={
-            "select": "*",
-            "order": "created_at.desc"
-        },
         timeout=15
     )
 
     return jsonify(response.json()), response.status_code
-
 
 @app.route("/api/goals", methods=["POST"])
 def add_goal():
