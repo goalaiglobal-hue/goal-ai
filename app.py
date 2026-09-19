@@ -36,6 +36,9 @@ def get_goals():
     response = requests.get(
         GOALS_URL,
         headers=HEADERS,
+        params={
+            "select": "*"
+        },
         timeout=15
     )
 
