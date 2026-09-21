@@ -646,13 +646,28 @@ async function changeProgress(id,amount){
 }
 
 
-function deleteGoal(id){
+async function deleteGoal(id){
 
   goals=goals.filter(g=>g.id!==id);
 
   saveData();
 
   renderGoals();
+
+
+  try{
+
+    await fetch(`https://goal-ai-dw76.onrender.com/api/goals/${id}`,{
+
+      method:"DELETE"
+
+    });
+
+  }catch(error){
+
+    console.error("Goal delete failed:",error);
+
+  }
 
 }
 
