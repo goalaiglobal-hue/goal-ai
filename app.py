@@ -24,11 +24,10 @@ HEADERS = {
 
 @app.route("/", methods=["GET"])
 def home():
-    return jsonify({
-        "status": "running",
-        "backend": "Flask",
-        "database": "Supabase"
-    })
+    return send_from_directory(
+        os.path.dirname(os.path.abspath(__file__)),
+        "index.html"
+    )
 
 
 @app.route("/api/goals", methods=["GET"])
