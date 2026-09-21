@@ -480,8 +480,11 @@ function saveGoal(){
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      goal: name
-    })
+  goal: name,
+  target_date: date,
+  category: category,
+  progress: 0
+})
   })
   .then(response => response.json())
   .then(data => {
