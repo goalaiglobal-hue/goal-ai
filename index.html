@@ -499,7 +499,7 @@ function saveGoal(){
   document.getElementById("message").textContent =
   "✅ Goal saved successfully!";
 }
-  loadGoalsFromBackend();
+  
 async function loadGoalsFromBackend() {
     try {
         const res = await fetch("https://goal-ai-dw76.onrender.com/api/goals");
