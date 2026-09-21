@@ -598,7 +598,7 @@ function renderGoals(){
 }
 
 
-function changeProgress(id,amount){
+async function changeProgress(id,amount){
 
   const goal=goals.find(g=>g.id===id);
 
@@ -619,6 +619,29 @@ function changeProgress(id,amount){
   saveData();
 
   renderGoals();
+
+
+  try{
+
+    await fetch(`https://goal-ai-dw76.onrender.com/api/goals/${id}`,{
+
+      method:"PATCH",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+        progress:goal.progress
+      })
+
+    });
+
+  }catch(error){
+
+    console.error("Progress update failed:",error);
+
+  }
 
 }
 
