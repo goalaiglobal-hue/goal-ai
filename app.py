@@ -1,59 +1,35 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask import Flask, jsonify, request, render_template
 import os
 import requests
 
 app = Flask(__name__)
-CORS(app)
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+SUPABASE_URL = os.environ["SUPABASE_URL"]
+SUPABASE_KEY = os.environ["SUPABASE_KEY"]
 
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise RuntimeError(
-        "SUPABASE_URL and SUPABASE_KEY environment variables are required"
-    )
-
-GOALS_URL = SUPABASE_URL.rstrip("/") + "/rest/v1/goals"
-
-HEADERS = {
+headers = {
     "apikey": SUPABASE_KEY,
+    "Authorization": "Bearer " + SUPABASE_KEY,
     "Content-Type": "application/json"
 }
 
-
-@app.route("/", methods=["GET"])
+@app.route("/")
 def home():
-    return jsonify({
-        "status": "running",
-        "backend": "Flask",
-        "database": "Supabase"
-    })
+    return render_template("index.html")
 
-
-@app.route("/api/goals", methods=["GET"])
+@app.route("/goals", methods=["GET"])
 def get_goals():
-    response = requests.get(
-        GOALS_URL,
-        headers=HEADERS,
-        params={
-            "select": "*",
-            "order": "created_at.desc"
-        },
-        timeout=15
+    r = requests.get(
+        SUPABASE_URL + "goals?select=*",
+        headers=headers
     )
+    return jsonify(r.json()), r.status_code
 
-    return jsonify(response.json()), response.status_code
-
-
-@app.route("/api/goals", methods=["POST"])
+@app.route("/goals", methods=["POST"])
 def add_goal():
-    data = request.get_json(silent=True)
-
+    data = request.get_json()
     if not data or not data.get("goal"):
-        return jsonify({
-            "error": "Goal text missing!"
-        }), 400
+        return jsonify({"error": "Goal text missing!"}), 400
 
     payload = {
         "goal": data["goal"],
@@ -62,83 +38,36 @@ def add_goal():
         "progress": data.get("progress", 0)
     }
 
-    response = requests.post(
-        GOALS_URL,
+    r = requests.post(
+        SUPABASE_URL + "goals",
         headers={
-            **HEADERS,
+            **headers,
             "Prefer": "return=representation"
         },
-        json=payload,
-        timeout=15
+        json=payload
     )
+    return jsonify(r.json()), r.status_code
 
-    return jsonify(response.json()), response.status_code
-
-
-@app.route("/api/goals/<int:goal_id>", methods=["PATCH"])
+@app.route("/goals/<int:goal_id>", methods=["PATCH"])
 def update_goal(goal_id):
-    data = request.get_json(silent=True)
-
-    if not data:
-        return jsonify({
-            "error": "No data provided!"
-        }), 400
-
-    allowed_fields = {
-        "goal",
-        "target_date",
-        "category",
-        "progress"
-    }
-
-    payload = {
-        key: data[key]
-        for key in allowed_fields
-        if key in data
-    }
-
-    if not payload:
-        return jsonify({
-            "error": "No valid fields provided!"
-        }), 400
-
-    response = requests.patch(
-        GOALS_URL,
+    data = request.get_json()
+    r = requests.patch(
+        SUPABASE_URL + f"goals?id=eq.{goal_id}",
         headers={
-            **HEADERS,
+            **headers,
             "Prefer": "return=representation"
         },
-        params={
-            "id": f"eq.{goal_id}"
-        },
-        json=payload,
-        timeout=15
+        json=data
     )
+    return jsonify(r.json()), r.status_code
 
-    return jsonify(response.json()), response.status_code
-
-
-@app.route("/api/goals/<int:goal_id>", methods=["DELETE"])
+@app.route("/goals/<int:goal_id>", methods=["DELETE"])
 def delete_goal(goal_id):
-    response = requests.delete(
-        GOALS_URL,
-        headers={
-            **HEADERS,
-            "Prefer": "return=representation"
-        },
-        params={
-            "id": f"eq.{goal_id}"
-        },
-        timeout=15
+    r = requests.delete(
+        SUPABASE_URL + f"goals?id=eq.{goal_id}",
+        headers=headers
     )
-
-    return jsonify(response.json()), response.status_code
-
+    return jsonify({"message": "Goal deleted", "status": r.status_code}), r.status_code
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))
-
-    app.run(
-        host="0.0.0.0",
-        port=port
-    )
+    app.run(host="0.0.0.0", port=8000, debug=True)
