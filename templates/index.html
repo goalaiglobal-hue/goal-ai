@@ -1,1 +1,61 @@
-<h1>Goal AI API is Live!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goal AI Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; padding: 20px; display: flex; justify-content: center; }
+        .container { max-width: 600px; width: 100%; }
+        h1 { text-align: center; margin-bottom: 20px; color: #38bdf8; }
+        .card { background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #334155; }
+        .goal-title { font-size: 1.2rem; font-weight: bold; color: #f1f5f9; }
+        .goal-meta { font-size: 0.85rem; color: #94a3b8; margin-top: 5px; }
+        .progress-bar { background: #334155; border-radius: 8px; height: 10px; overflow: hidden; margin-top: 10px; }
+        .progress-fill { background: #38bdf8; height: 100%; border-radius: 8px; }
+        .loading { text-align: center; color: #94a3b8; font-size: 1.1rem; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Goal AI Dashboard</h1>
+        <div id="goals-list">
+            <div class="loading">Loading your goals...</div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchGoals() {
+            try {
+                const response = await fetch('/goals');
+                const goals = await response.json();
+                const container = document.getElementById('goals-list');
+                container.innerHTML = '';
+
+                if (goals.length === 0) {
+                    container.innerHTML = '<div class="loading">No goals found!</div>';
+                    return;
+                }
+
+                goals.forEach(g => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <div class="goal-title">${g.goal || 'Untitled Goal'}</div>
+                        <div class="goal-meta">Category: ${g.category || 'General'} | Target: ${g.target_date || 'N/A'}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${g.progress || 0}%"></div>
+                        </div>
+                        <div class="goal-meta" style="text-align: right; margin-top: 5px;">${g.progress || 0}% Completed</div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                document.getElementById('goals-list').innerHTML = '<div class="loading" style="color: #ef4444;">Failed to load goals.</div>';
+            }
+        }
+        fetchGoals();
+    </script>
+</body>
+</html>
