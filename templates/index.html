@@ -33,7 +33,7 @@
         .card-sub { font-size: 12px; color: #64748b; margin-bottom: 18px; }
         .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
         .btn { border: none; padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
-        .btn:active { transform: scale(0.96); }
+        .btn:active { transform: scale(0.95); }
         .btn-primary { background: #4f46e5; color: #fff; }
         .btn-secondary { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
         .footer-text { font-size: 10px; color: #475569; text-align: center; margin: 4px 0 8px 0; }
@@ -44,13 +44,12 @@
         .task-item span { flex: 1; text-align: center; }
         .task-action { background: #4f46e5; color: white; border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; flex-shrink: 0; }
 
-        /* Modal Popup Styles */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
-        .modal.active { display: flex; }
-        .modal-content { background: #111a2e; border: 1px solid #334155; border-radius: 16px; padding: 20px; width: 100%; max-width: 400px; text-align: left; }
-        .modal-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 12px; }
-        .modal-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #070c18; color: #fff; font-size: 13px; margin-bottom: 14px; outline: none; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.75); align-items: center; justify-content: center; z-index: 9999; padding: 16px; }
+        .modal-overlay.open { display: flex !important; }
+        .modal-box { background: #111a2e; border: 1px solid #334155; border-radius: 16px; padding: 24px; width: 100%; max-width: 400px; text-align: left; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .modal-box h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+        .modal-box input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #070c18; color: #fff; font-size: 13px; margin-bottom: 16px; outline: none; }
+        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; }
     </style>
 </head>
 <body>
@@ -68,9 +67,9 @@
             <div class="card-title">Your Goals. Your Focus. Your Future.</div>
             <div class="card-sub">Set your goal, track your progress and get simple AI-powered guidance.</div>
             <div class="btn-group">
-                <button class="btn btn-primary" onclick="openModal('goalModal')">🎯 Create Goal</button>
-                <button class="btn btn-secondary" onclick="alert('Tracking Feature Active!')">📊 Track Progress</button>
-                <button class="btn btn-secondary" onclick="alert('AI Coach is Analyzing your Progress...')">🤖 AI Coach</button>
+                <button type="button" class="btn btn-primary" id="btnCreateGoal">🎯 Create Goal</button>
+                <button type="button" class="btn btn-secondary" id="btnTrackProgress">📊 Track Progress</button>
+                <button type="button" class="btn btn-secondary" id="btnAICoach">🤖 AI Coach</button>
             </div>
         </div>
 
@@ -81,108 +80,147 @@
             <div class="card-title">📅 Daily Action Plan</div>
             <div class="card-sub">Break your goal into small actions for today.</div>
             
-            <div class="task-list" id="taskList">
+            <div class="task-list" id="taskListContainer">
                 <div class="task-separator"></div>
                 <div class="task-item">
                     <span>Learn 10 important points about Teeth pain - 10 minutes</span>
-                    <button class="task-action" onclick="deleteTask(this)">🗑️</button>
+                    <button class="task-action btn-delete">🗑️</button>
                 </div>
                 <div class="task-separator"></div>
                 <div class="task-item">
                     <span>Practice Teeth pain with a simple exercise - 10 minutes</span>
-                    <button class="task-action" onclick="deleteTask(this)">🗑️</button>
+                    <button class="task-action btn-delete">🗑️</button>
                 </div>
                 <div class="task-separator"></div>
                 <div class="task-item">
                     <span>Review what you learned today - 10 minutes</span>
-                    <button class="task-action" onclick="deleteTask(this)">🗑️</button>
+                    <button class="task-action btn-delete">🗑️</button>
                 </div>
             </div>
 
-            <button class="btn btn-primary" onclick="openModal('taskModal')">➕ Add Daily Task</button>
+            <button type="button" class="btn btn-primary" id="btnAddDailyTask">➕ Add Daily Task</button>
         </div>
 
         <!-- AI Roadmap -->
         <div class="card">
             <div class="card-title">🧩 AI Roadmap</div>
             <div class="card-sub">Turn your goal into clear steps and move forward one step at a time.</div>
-            <button class="btn btn-primary" onclick="generateRoadmap()">🚀 Generate Roadmap</button>
+            <button type="button" class="btn btn-primary" id="btnGenRoadmap">🚀 Generate Roadmap</button>
         </div>
 
     </div>
 
     <!-- Create Goal Modal -->
-    <div class="modal" id="goalModal">
-        <div class="modal-content">
-            <div class="modal-title">🎯 Set a New Goal</div>
-            <input type="text" id="goalInput" class="modal-input" placeholder="e.g. Learn Python in 30 days">
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal('goalModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="saveGoal()">Save Goal</button>
+    <div class="modal-overlay" id="goalModal">
+        <div class="modal-box">
+            <h3>🎯 Set a New Goal</h3>
+            <input type="text" id="goalInput" placeholder="e.g. Learn Python in 30 days">
+            <div class="modal-btns">
+                <button type="button" class="btn btn-secondary" id="closeGoalModal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveGoalBtn">Save Goal</button>
             </div>
         </div>
     </div>
 
     <!-- Add Task Modal -->
-    <div class="modal" id="taskModal">
-        <div class="modal-content">
-            <div class="modal-title">➕ Add Daily Action</div>
-            <input type="text" id="taskInput" class="modal-input" placeholder="e.g. Read Chapter 1 - 15 mins">
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal('taskModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="addTask()">Add Task</button>
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal-box">
+            <h3>➕ Add Daily Action</h3>
+            <input type="text" id="taskInput" placeholder="e.g. Read Chapter 1 - 15 mins">
+            <div class="modal-btns">
+                <button type="button" class="btn btn-secondary" id="closeTaskModal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveTaskBtn">Add Task</button>
             </div>
         </div>
     </div>
 
     <script>
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const goalModal = document.getElementById('goalModal');
+            const taskModal = document.getElementById('taskModal');
 
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
+            // Open Goal Modal
+            document.getElementById('btnCreateGoal').addEventListener('click', function() {
+                goalModal.classList.add('open');
+            });
 
-        function saveGoal() {
-            const val = document.getElementById('goalInput').value;
-            if(val) {
-                alert('Goal Created: ' + val);
-                closeModal('goalModal');
-                document.getElementById('goalInput').value = '';
+            // Close Goal Modal
+            document.getElementById('closeGoalModal').addEventListener('click', function() {
+                goalModal.classList.remove('open');
+            });
+
+            // Save Goal
+            document.getElementById('saveGoalBtn').addEventListener('click', function() {
+                const val = document.getElementById('goalInput').value.trim();
+                if(val) {
+                    alert('Goal Created: ' + val);
+                    document.getElementById('goalInput').value = '';
+                    goalModal.classList.remove('open');
+                }
+            });
+
+            // Open Task Modal
+            document.getElementById('btnAddDailyTask').addEventListener('click', function() {
+                taskModal.classList.add('open');
+            });
+
+            // Close Task Modal
+            document.getElementById('closeTaskModal').addEventListener('click', function() {
+                taskModal.classList.remove('open');
+            });
+
+            // Add Task
+            document.getElementById('saveTaskBtn').addEventListener('click', function() {
+                const val = document.getElementById('taskInput').value.trim();
+                if(val) {
+                    const container = document.getElementById('taskListContainer');
+                    
+                    const sep = document.createElement('div');
+                    sep.className = 'task-separator';
+                    
+                    const item = document.createElement('div');
+                    item.className = 'task-item';
+                    item.innerHTML = `<span>${val}</span><button type="button" class="task-action btn-delete">🗑️</button>`;
+                    
+                    container.appendChild(sep);
+                    container.appendChild(item);
+                    
+                    document.getElementById('taskInput').value = '';
+                    taskModal.classList.remove('open');
+                    
+                    attachDeleteEvents();
+                }
+            });
+
+            // Delete Task Function
+            function attachDeleteEvents() {
+                document.querySelectorAll('.btn-delete').forEach(function(btn) {
+                    btn.onclick = function() {
+                        const item = this.parentElement;
+                        const prevSep = item.previousElementSibling;
+                        if(prevSep && prevSep.classList.contains('task-separator')) {
+                            prevSep.remove();
+                        }
+                        item.remove();
+                    };
+                });
             }
-        }
 
-        function addTask() {
-            const val = document.getElementById('taskInput').value;
-            if(val) {
-                const list = document.getElementById('taskList');
-                const sep = document.createElement('div');
-                sep.className = 'task-separator';
-                
-                const item = document.createElement('div');
-                item.className = 'task-item';
-                item.innerHTML = `<span>${val}</span><button class="task-action" onclick="deleteTask(this)">🗑️</button>`;
-                
-                list.appendChild(sep);
-                list.appendChild(item);
-                closeModal('taskModal');
-                document.getElementById('taskInput').value = '';
-            }
-        }
+            attachDeleteEvents();
 
-        function deleteTask(btn) {
-            const item = btn.parentElement;
-            const prevSep = item.previousElementSibling;
-            if(prevSep && prevSep.classList.contains('task-separator')) {
-                prevSep.remove();
-            }
-            item.remove();
-        }
+            // Other Buttons
+            document.getElementById('btnTrackProgress').addEventListener('click', function() {
+                alert('📊 Track Progress active!');
+            });
 
-        function generateRoadmap() {
-            alert('🤖 AI is generating your customized roadmap steps...');
-        }
+            document.getElementById('btnAICoach').addEventListener('click', function() {
+                alert('🤖 AI Coach is analyzing...');
+            });
+
+            document.getElementById('btnGenRoadmap').addEventListener('click', function() {
+                alert('🚀 Generating AI Roadmap...');
+            });
+        });
     </script>
 </body>
 </html>
