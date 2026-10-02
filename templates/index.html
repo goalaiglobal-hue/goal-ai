@@ -9,7 +9,6 @@
         body { background: #070c18; color: #e2e8f0; display: flex; flex-direction: column; align-items: center; padding: 30px 16px; min-height: 100vh; }
         .app-header { text-align: center; margin-bottom: 24px; }
         
-        /* Original Glowing Logo Style */
         .logo-circle { 
             width: 64px; 
             height: 64px; 
@@ -33,7 +32,8 @@
         .card-title { font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
         .card-sub { font-size: 12px; color: #64748b; margin-bottom: 18px; }
         .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        .btn { border: none; padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+        .btn { border: none; padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .btn:active { transform: scale(0.96); }
         .btn-primary { background: #4f46e5; color: #fff; }
         .btn-secondary { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
         .footer-text { font-size: 10px; color: #475569; text-align: center; margin: 4px 0 8px 0; }
@@ -43,6 +43,14 @@
         .task-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; color: #cbd5e1; text-align: left; background: transparent; }
         .task-item span { flex: 1; text-align: center; }
         .task-action { background: #4f46e5; color: white; border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; flex-shrink: 0; }
+
+        /* Modal Popup Styles */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+        .modal.active { display: flex; }
+        .modal-content { background: #111a2e; border: 1px solid #334155; border-radius: 16px; padding: 20px; width: 100%; max-width: 400px; text-align: left; }
+        .modal-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+        .modal-input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #070c18; color: #fff; font-size: 13px; margin-bottom: 14px; outline: none; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
     </style>
 </head>
 <body>
@@ -60,9 +68,9 @@
             <div class="card-title">Your Goals. Your Focus. Your Future.</div>
             <div class="card-sub">Set your goal, track your progress and get simple AI-powered guidance.</div>
             <div class="btn-group">
-                <button class="btn btn-primary">🎯 Create Goal</button>
-                <button class="btn btn-secondary">📊 Track Progress</button>
-                <button class="btn btn-secondary">🤖 AI Coach</button>
+                <button class="btn btn-primary" onclick="openModal('goalModal')">🎯 Create Goal</button>
+                <button class="btn btn-secondary" onclick="alert('Tracking Feature Active!')">📊 Track Progress</button>
+                <button class="btn btn-secondary" onclick="alert('AI Coach is Analyzing your Progress...')">🤖 AI Coach</button>
             </div>
         </div>
 
@@ -73,35 +81,108 @@
             <div class="card-title">📅 Daily Action Plan</div>
             <div class="card-sub">Break your goal into small actions for today.</div>
             
-            <div class="task-list">
+            <div class="task-list" id="taskList">
                 <div class="task-separator"></div>
                 <div class="task-item">
                     <span>Learn 10 important points about Teeth pain - 10 minutes</span>
-                    <button class="task-action">🗑️</button>
+                    <button class="task-action" onclick="deleteTask(this)">🗑️</button>
                 </div>
                 <div class="task-separator"></div>
                 <div class="task-item">
                     <span>Practice Teeth pain with a simple exercise - 10 minutes</span>
-                    <button class="task-action">🗑️</button>
+                    <button class="task-action" onclick="deleteTask(this)">🗑️</button>
                 </div>
                 <div class="task-separator"></div>
                 <div class="task-item">
                     <span>Review what you learned today - 10 minutes</span>
-                    <button class="task-action">🗑️</button>
+                    <button class="task-action" onclick="deleteTask(this)">🗑️</button>
                 </div>
             </div>
 
-            <button class="btn btn-primary">➕ Add Daily Task</button>
+            <button class="btn btn-primary" onclick="openModal('taskModal')">➕ Add Daily Task</button>
         </div>
 
         <!-- AI Roadmap -->
         <div class="card">
             <div class="card-title">🧩 AI Roadmap</div>
             <div class="card-sub">Turn your goal into clear steps and move forward one step at a time.</div>
-            <button class="btn btn-primary">🚀 Generate Roadmap</button>
+            <button class="btn btn-primary" onclick="generateRoadmap()">🚀 Generate Roadmap</button>
         </div>
 
     </div>
 
+    <!-- Create Goal Modal -->
+    <div class="modal" id="goalModal">
+        <div class="modal-content">
+            <div class="modal-title">🎯 Set a New Goal</div>
+            <input type="text" id="goalInput" class="modal-input" placeholder="e.g. Learn Python in 30 days">
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('goalModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveGoal()">Save Goal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-title">➕ Add Daily Action</div>
+            <input type="text" id="taskInput" class="modal-input" placeholder="e.g. Read Chapter 1 - 15 mins">
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('taskModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addTask()">Add Task</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function saveGoal() {
+            const val = document.getElementById('goalInput').value;
+            if(val) {
+                alert('Goal Created: ' + val);
+                closeModal('goalModal');
+                document.getElementById('goalInput').value = '';
+            }
+        }
+
+        function addTask() {
+            const val = document.getElementById('taskInput').value;
+            if(val) {
+                const list = document.getElementById('taskList');
+                const sep = document.createElement('div');
+                sep.className = 'task-separator';
+                
+                const item = document.createElement('div');
+                item.className = 'task-item';
+                item.innerHTML = `<span>${val}</span><button class="task-action" onclick="deleteTask(this)">🗑️</button>`;
+                
+                list.appendChild(sep);
+                list.appendChild(item);
+                closeModal('taskModal');
+                document.getElementById('taskInput').value = '';
+            }
+        }
+
+        function deleteTask(btn) {
+            const item = btn.parentElement;
+            const prevSep = item.previousElementSibling;
+            if(prevSep && prevSep.classList.contains('task-separator')) {
+                prevSep.remove();
+            }
+            item.remove();
+        }
+
+        function generateRoadmap() {
+            alert('🤖 AI is generating your customized roadmap steps...');
+        }
+    </script>
 </body>
 </html>
