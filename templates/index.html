@@ -3,59 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal AI Dashboard</title>
+    <title>Goal AI - Plan, Focus, Achieve</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0f172a; color: #f8fafc; padding: 20px; display: flex; justify-content: center; }
-        .container { max-width: 600px; width: 100%; }
-        h1 { text-align: center; margin-bottom: 20px; color: #38bdf8; }
-        .card { background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #334155; }
-        .goal-title { font-size: 1.2rem; font-weight: bold; color: #f1f5f9; }
-        .goal-meta { font-size: 0.85rem; color: #94a3b8; margin-top: 5px; }
-        .progress-bar { background: #334155; border-radius: 8px; height: 10px; overflow: hidden; margin-top: 10px; }
-        .progress-fill { background: #38bdf8; height: 100%; border-radius: 8px; }
-        .loading { text-align: center; color: #94a3b8; font-size: 1.1rem; margin-top: 40px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #0b0f19; color: #e2e8f0; display: flex; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; }
+        .app-header { text-align: center; margin-bottom: 24px; }
+        .logo-circle { width: 48px; height: 48px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; margin: 0 auto 12px; color: #fff; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4); }
+        .app-title { font-size: 26px; font-weight: 800; tracking: 1px; color: #ffffff; margin-bottom: 4px; }
+        .app-subtitle { font-size: 12px; color: #94a3b8; font-weight: 500; }
+        .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 16px; }
+        .card { background: #131c31; border: 1px solid #1e293b; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); text-align: center; }
+        .card-title { font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; }
+        .card-sub { font-size: 11px; color: #64748b; margin-bottom: 16px; }
+        .btn-group { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .btn { border: none; padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
+        .btn-primary { background: #4f46e5; color: #fff; }
+        .btn-secondary { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; }
+        .task-list { display: flex; flex-direction: column; gap: 12px; text-align: left; margin: 16px 0; }
+        .task-item { background: #0f172a; padding: 12px; border-radius: 10px; border: 1px solid #1e293b; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .task-text { font-size: 12px; color: #cbd5e1; flex: 1; }
+        .task-btn { background: #3b82f6; border: none; width: 28px; height: 28px; border-radius: 6px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; }
+        .footer-text { font-size: 10px; color: #475569; margin-bottom: 12px; }
     </style>
 </head>
 <body>
+
+    <div class="app-header">
+        <div class="logo-circle">AI</div>
+        <div class="app-title">GOAL AI</div>
+        <div class="app-subtitle">Plan • Focus • Achieve</div>
+    </div>
+
     <div class="container">
-        <h1>🎯 Goal AI Dashboard</h1>
-        <div id="goals-list">
-            <div class="loading">Loading your goals...</div>
+        
+        <!-- Hero Card -->
+        <div class="card">
+            <div class="card-title">Your Goals. Your Focus. Your Future.</div>
+            <div class="card-sub">Set your goal, track your progress and get simple AI-powered guidance.</div>
+            <div class="btn-group">
+                <button class="btn btn-primary">🎯 Create Goal</button>
+                <button class="btn btn-secondary">📊 Track Progress</button>
+                <button class="btn btn-secondary">🤖 AI Coach</button>
+            </div>
         </div>
+
+        <div class="footer-text">© 2026 Goal AI • Plan • Focus • Achieve</div>
+
+        <!-- Daily Action Plan -->
+        <div class="card">
+            <div class="card-title">📅 Daily Action Plan</div>
+            <div class="card-sub">Break your goal into small actions for today.</div>
+            
+            <div class="task-list" id="goals-container">
+                <div style="text-align:center; font-size:12px; color:#64748b;">Loading goals...</div>
+            </div>
+
+            <button class="btn btn-primary" style="margin-top: 8px;">➕ Add Daily Task</button>
+        </div>
+
+        <!-- AI Roadmap -->
+        <div class="card">
+            <div class="card-title">🧩 AI Roadmap</div>
+            <div class="card-sub">Turn your goal into clear steps and move forward one step at a time.</div>
+            <button class="btn btn-primary">🚀 Generate Roadmap</button>
+        </div>
+
     </div>
 
     <script>
-        async function fetchGoals() {
+        async function loadGoals() {
             try {
-                const response = await fetch('/goals');
-                const goals = await response.json();
-                const container = document.getElementById('goals-list');
+                const res = await fetch('/goals');
+                const goals = await res.json();
+                const container = document.getElementById('goals-container');
                 container.innerHTML = '';
 
-                if (goals.length === 0) {
-                    container.innerHTML = '<div class="loading">No goals found!</div>';
+                if (!goals || goals.length === 0) {
+                    container.innerHTML = '<div style="text-align:center; font-size:12px; color:#64748b;">No active goals found.</div>';
                     return;
                 }
 
                 goals.forEach(g => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.innerHTML = `
-                        <div class="goal-title">${g.goal || 'Untitled Goal'}</div>
-                        <div class="goal-meta">Category: ${g.category || 'General'} | Target: ${g.target_date || 'N/A'}</div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${g.progress || 0}%"></div>
-                        </div>
-                        <div class="goal-meta" style="text-align: right; margin-top: 5px;">${g.progress || 0}% Completed</div>
+                    const div = document.createElement('div');
+                    div.className = 'task-item';
+                    div.innerHTML = `
+                        <div class="task-text">${g.goal || 'Untitled Task'}</div>
+                        <button class="task-btn">✓</button>
                     `;
-                    container.appendChild(card);
+                    container.appendChild(div);
                 });
             } catch (err) {
-                document.getElementById('goals-list').innerHTML = '<div class="loading" style="color: #ef4444;">Failed to load goals.</div>';
+                document.getElementById('goals-container').innerHTML = '<div style="text-align:center; font-size:12px; color:#ef4444;">Failed to load.</div>';
             }
         }
-        fetchGoals();
+        loadGoals();
     </script>
+
 </body>
 </html>
