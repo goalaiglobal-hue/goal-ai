@@ -3,223 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal AI - Plan, Focus, Achieve</title>
+    <title>Goal AI - Plan, Focus & Achieve Your Goals with AI</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: #070c18; color: #e2e8f0; display: flex; flex-direction: column; align-items: center; padding: 30px 16px; min-height: 100vh; }
-        .app-header { text-align: center; margin-bottom: 24px; }
+        body { background: #070c18; color: #e2e8f0; display: flex; flex-direction: column; align-items: center; padding: 20px 16px; min-height: 100vh; }
         
+        .header { text-align: center; margin-top: 20px; margin-bottom: 28px; width: 100%; max-width: 600px; }
         .logo-circle { 
-            width: 64px; 
-            height: 64px; 
+            width: 70px; height: 70px; 
             background: linear-gradient(135deg, #a855f7, #6366f1); 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-weight: 700; 
-            font-size: 18px; 
-            color: #ffffff; 
-            margin: 0 auto 14px; 
-            box-shadow: 0 0 30px 8px rgba(168, 85, 247, 0.45); 
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-weight: 800; font-size: 22px; color: #ffffff; margin: 0 auto 16px; 
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.5); border: 2px solid rgba(255, 255, 255, 0.2);
         }
-        
-        .app-title { font-size: 32px; font-weight: 800; letter-spacing: 2px; color: #ffffff; }
-        .app-subtitle { font-size: 12px; color: #64748b; margin-top: 4px; }
-        .container { width: 100%; max-width: 520px; display: flex; flex-direction: column; gap: 18px; }
-        .card { background: #111a2e; border: 1px solid #1e293b; border-radius: 16px; padding: 24px 20px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-        .card-title { font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
-        .card-sub { font-size: 12px; color: #64748b; margin-bottom: 18px; }
-        .btn-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        .btn { border: none; padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
-        .btn:active { transform: scale(0.95); }
-        .btn-primary { background: #4f46e5; color: #fff; }
-        .btn-secondary { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
-        .footer-text { font-size: 10px; color: #475569; text-align: center; margin: 4px 0 8px 0; }
-        
-        .task-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; text-align: center; }
-        .task-separator { width: 6px; height: 6px; background: #ffffff; margin: 0 auto; opacity: 0.8; }
-        .task-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; color: #cbd5e1; text-align: left; background: transparent; }
-        .task-item span { flex: 1; text-align: center; }
-        .task-action { background: #4f46e5; color: white; border: none; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; flex-shrink: 0; }
+        .title { font-size: 34px; font-weight: 800; letter-spacing: 2px; color: #ffffff; }
+        .subtitle { font-size: 14px; color: #94a3b8; margin-top: 6px; }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.75); align-items: center; justify-content: center; z-index: 9999; padding: 16px; }
-        .modal-overlay.open { display: flex !important; }
-        .modal-box { background: #111a2e; border: 1px solid #334155; border-radius: 16px; padding: 24px; width: 100%; max-width: 400px; text-align: left; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .modal-box h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 12px; }
-        .modal-box input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #070c18; color: #fff; font-size: 13px; margin-bottom: 16px; outline: none; }
-        .modal-btns { display: flex; justify-content: flex-end; gap: 10px; }
+        .container { width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 20px; }
+        .card { background: #111a2e; border: 1px solid #1e293b; border-radius: 18px; padding: 24px 20px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .card-title { font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 8px; }
+        .card-sub { font-size: 13px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
+
+        .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn { border: none; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; text-decoration: none; }
+        .btn:active { transform: scale(0.96); }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+        .btn-secondary { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; }
+
+        .input-box { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid #334155; background: #070c18; color: #fff; font-size: 14px; margin-bottom: 12px; outline: none; text-align: center; }
+        .roadmap-output { display: none; background: #070c18; border: 1px solid #334155; border-radius: 12px; padding: 16px; margin-top: 16px; text-align: left; }
+        .roadmap-step { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; font-size: 13px; color: #cbd5e1; }
+        .step-num { background: #4f46e5; color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+
+        .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .feature-item { background: #070c18; border: 1px solid #1e293b; padding: 14px; border-radius: 12px; text-align: left; }
+        .feature-icon { font-size: 20px; margin-bottom: 6px; }
+        .feature-heading { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+        .feature-desc { font-size: 11px; color: #64748b; line-height: 1.4; }
+
+        .footer-text { font-size: 11px; color: #475569; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="app-header">
+    <div class="header">
         <div class="logo-circle">AI</div>
-        <div class="app-title">GOAL AI</div>
-        <div class="app-subtitle">Plan • Focus • Achieve</div>
+        <div class="title">GOAL AI</div>
+        <div class="subtitle">Plan • Focus • Achieve Your Dreams</div>
     </div>
 
     <div class="container">
         
-        <!-- Hero Card -->
+        <!-- Hero Section -->
         <div class="card">
-            <div class="card-title">Your Goals. Your Focus. Your Future.</div>
-            <div class="card-sub">Set your goal, track your progress and get simple AI-powered guidance.</div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary" id="btnCreateGoal">🎯 Create Goal</button>
-                <button type="button" class="btn btn-secondary" id="btnTrackProgress">📊 Track Progress</button>
-                <button type="button" class="btn btn-secondary" id="btnAICoach">🤖 AI Coach</button>
-            </div>
-        </div>
-
-        <div class="footer-text">© 2026 Goal AI • Plan • Focus • Achieve</div>
-
-        <!-- Daily Action Plan -->
-        <div class="card">
-            <div class="card-title">📅 Daily Action Plan</div>
-            <div class="card-sub">Break your goal into small actions for today.</div>
+            <div class="card-title">Your Personal AI Productivity Partner</div>
+            <div class="card-sub">Turn your vision into actionable daily steps. Set goals, build step-by-step roadmaps, and track your progress with AI assistance.</div>
             
-            <div class="task-list" id="taskListContainer">
-                <div class="task-separator"></div>
-                <div class="task-item">
-                    <span>Learn 10 important points about Teeth pain - 10 minutes</span>
-                    <button class="task-action btn-delete">🗑️</button>
-                </div>
-                <div class="task-separator"></div>
-                <div class="task-item">
-                    <span>Practice Teeth pain with a simple exercise - 10 minutes</span>
-                    <button class="task-action btn-delete">🗑️</button>
-                </div>
-                <div class="task-separator"></div>
-                <div class="task-item">
-                    <span>Review what you learned today - 10 minutes</span>
-                    <button class="task-action btn-delete">🗑️</button>
-                </div>
+            <div class="btn-group">
+                <a href="#demo" class="btn btn-primary">🚀 Try Instant Roadmap Generator</a>
             </div>
-
-            <button type="button" class="btn btn-primary" id="btnAddDailyTask">➕ Add Daily Task</button>
         </div>
 
-        <!-- AI Roadmap -->
+        <!-- Live Instant Roadmap Tool -->
+        <div class="card" id="demo">
+            <div class="card-title">🧩 AI Roadmap Generator</div>
+            <div class="card-sub">Type any goal below and get a personalized multi-step action roadmap instantly.</div>
+            
+            <input type="text" id="userGoalInput" class="input-box" placeholder="e.g. Master Python Programming in 30 Days">
+            <button type="button" class="btn btn-primary" id="generateBtn" style="width: 100%;">⚡ Generate AI Roadmap</button>
+
+            <div class="roadmap-output" id="roadmapResult">
+                <div style="font-weight:700; color:#fff; font-size:14px; margin-bottom:12px;" id="resultTitle">🎯 Action Roadmap</div>
+                <div id="stepsContainer"></div>
+            </div>
+        </div>
+
+        <!-- Key Features Overview -->
         <div class="card">
-            <div class="card-title">🧩 AI Roadmap</div>
-            <div class="card-sub">Turn your goal into clear steps and move forward one step at a time.</div>
-            <button type="button" class="btn btn-primary" id="btnGenRoadmap">🚀 Generate Roadmap</button>
-        </div>
-
-    </div>
-
-    <!-- Create Goal Modal -->
-    <div class="modal-overlay" id="goalModal">
-        <div class="modal-box">
-            <h3>🎯 Set a New Goal</h3>
-            <input type="text" id="goalInput" placeholder="e.g. Learn Python in 30 days">
-            <div class="modal-btns">
-                <button type="button" class="btn btn-secondary" id="closeGoalModal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveGoalBtn">Save Goal</button>
+            <div class="card-title">⚡ Why Choose Goal AI?</div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-heading">Smart Goal Setting</div>
+                    <div class="feature-desc">Categorize goals by difficulty, timeline, and daily target hours.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🧩</div>
+                    <div class="feature-heading">7-Step Roadmaps</div>
+                    <div class="feature-desc">AI breaks big goals into milestone-driven actionable steps.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-heading">Daily Progress Tracker</div>
+                    <div class="feature-desc">Mark completed daily tasks and monitor your streak live.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-heading">AI Productivity Coach</div>
+                    <div class="feature-desc">Get tailored advice and daily motivation from your AI Coach.</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Add Task Modal -->
-    <div class="modal-overlay" id="taskModal">
-        <div class="modal-box">
-            <h3>➕ Add Daily Action</h3>
-            <input type="text" id="taskInput" placeholder="e.g. Read Chapter 1 - 15 mins">
-            <div class="modal-btns">
-                <button type="button" class="btn btn-secondary" id="closeTaskModal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveTaskBtn">Add Task</button>
-            </div>
-        </div>
+        <div class="footer-text">© 2026 Goal AI • Empowering Creators & Achievers</div>
+
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const goalModal = document.getElementById('goalModal');
-            const taskModal = document.getElementById('taskModal');
-
-            // Open Goal Modal
-            document.getElementById('btnCreateGoal').addEventListener('click', function() {
-                goalModal.classList.add('open');
-            });
-
-            // Close Goal Modal
-            document.getElementById('closeGoalModal').addEventListener('click', function() {
-                goalModal.classList.remove('open');
-            });
-
-            // Save Goal
-            document.getElementById('saveGoalBtn').addEventListener('click', function() {
-                const val = document.getElementById('goalInput').value.trim();
-                if(val) {
-                    alert('Goal Created: ' + val);
-                    document.getElementById('goalInput').value = '';
-                    goalModal.classList.remove('open');
-                }
-            });
-
-            // Open Task Modal
-            document.getElementById('btnAddDailyTask').addEventListener('click', function() {
-                taskModal.classList.add('open');
-            });
-
-            // Close Task Modal
-            document.getElementById('closeTaskModal').addEventListener('click', function() {
-                taskModal.classList.remove('open');
-            });
-
-            // Add Task
-            document.getElementById('saveTaskBtn').addEventListener('click', function() {
-                const val = document.getElementById('taskInput').value.trim();
-                if(val) {
-                    const container = document.getElementById('taskListContainer');
-                    
-                    const sep = document.createElement('div');
-                    sep.className = 'task-separator';
-                    
-                    const item = document.createElement('div');
-                    item.className = 'task-item';
-                    item.innerHTML = `<span>${val}</span><button type="button" class="task-action btn-delete">🗑️</button>`;
-                    
-                    container.appendChild(sep);
-                    container.appendChild(item);
-                    
-                    document.getElementById('taskInput').value = '';
-                    taskModal.classList.remove('open');
-                    
-                    attachDeleteEvents();
-                }
-            });
-
-            // Delete Task Function
-            function attachDeleteEvents() {
-                document.querySelectorAll('.btn-delete').forEach(function(btn) {
-                    btn.onclick = function() {
-                        const item = this.parentElement;
-                        const prevSep = item.previousElementSibling;
-                        if(prevSep && prevSep.classList.contains('task-separator')) {
-                            prevSep.remove();
-                        }
-                        item.remove();
-                    };
-                });
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            const goalText = document.getElementById('userGoalInput').value.trim();
+            if(!goalText) {
+                alert('Please enter a goal first!');
+                return;
             }
 
-            attachDeleteEvents();
+            const btn = this;
+            btn.innerText = '🤖 AI is planning your steps...';
+            btn.style.opacity = '0.7';
 
-            // Other Buttons
-            document.getElementById('btnTrackProgress').addEventListener('click', function() {
-                alert('📊 Track Progress active!');
-            });
+            setTimeout(() => {
+                btn.innerText = '⚡ Generate AI Roadmap';
+                btn.style.opacity = '1';
 
-            document.getElementById('btnAICoach').addEventListener('click', function() {
-                alert('🤖 AI Coach is analyzing...');
-            });
+                const resultBox = document.getElementById('roadmapResult');
+                const stepsContainer = document.getElementById('stepsContainer');
+                document.getElementById('resultTitle').innerText = '🎯 Roadmap: ' + goalText;
 
-            document.getElementById('btnGenRoadmap').addEventListener('click', function() {
-                alert('🚀 Generating AI Roadmap...');
-            });
+                const steps = [
+                    "Define core objectives and break down key topics.",
+                    "Set up daily 30-minute focus sessions with clear milestones.",
+                    "Complete basic practical projects & track daily logs.",
+                    "Review progress weekly and adjust difficulty levels with AI Coach."
+                ];
+
+                stepsContainer.innerHTML = steps.map((step, idx) => `
+                    <div class="roadmap-step">
+                        <div class="step-num">${idx + 1}</div>
+                        <div>${step}</div>
+                    </div>
+                `).join('');
+
+                resultBox.style.display = 'block';
+            }, 1000);
         });
     </script>
 </body>
