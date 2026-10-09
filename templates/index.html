@@ -6,32 +6,32 @@
     <title>Goal AI - Plan, Focus & Achieve</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #070c18; color: #e2e8f0; font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; }
-        .header { text-align: center; margin-top: 10px; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; }
-        .logo-circle { width: 64px; height: 64px; background: linear-gradient(135deg, #a855f7, #6366f1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; color: #fff; box-shadow: 0 0 35px rgba(168, 85, 247, 0.5); margin-bottom: 12px; }
+        body { background: #070c18; color: #e2e8f0; font-family: system-ui, -apple-system, sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { text-align: center; margin-top: 10px; margin-bottom: 25px; }
+        .logo-circle { width: 64px; height: 64px; background: linear-gradient(135deg, #a855f7, #ec4899); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; color: #fff; margin: 0 auto 12px; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
         .title { font-size: 32px; font-weight: 800; letter-spacing: 2px; }
         .subtitle { font-size: 12px; color: #94a3b8; margin-top: 4px; }
-        .container { width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 20px; }
-        .card { background: #111a2e; border: 1px solid #1e293b; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-        .card-title { font-size: 16px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
-        .card-sub { font-size: 12px; color: #94a3b8; margin-top: -8px; }
-        .btn { border: none; padding: 12px 16px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .container { width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 16px; }
+        .card { background: #111a2e; border: 1px solid #1e293b; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .card-title { font-size: 16px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+        .card-sub { font-size: 12px; color: #94a3b8; margin-top: -4px; margin-bottom: 14px; }
+        .btn { border: none; padding: 12px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; width: 100%; margin-top: 10px; }
         .btn:active { transform: scale(0.96); }
         .btn-primary { background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff; }
         .btn-secondary { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; }
-        .input-box { width: 100%; padding: 12px; border-radius: 10px; background: #070c18; border: 1px solid #1e293b; color: #fff; font-size: 14px; outline: none; }
-        .active-goal-box { background: #070c18; border: 1px solid #1e293b; padding: 12px; border-radius: 10px; margin-top: 4px; }
-        .goal-header-text { font-size: 11px; color: #a855f7; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+        .input-box { width: 100%; padding: 12px; border-radius: 10px; background: #070c18; border: 1px solid #1e293b; color: #fff; font-size: 14px; outline: none; margin-bottom: 10px; }
+        .active-goal-box { background: #070c18; border: 1px solid #1e293b; padding: 12px; border-radius: 10px; margin-top: 10px; }
+        .goal-header-text { font-size: 11px; color: #a855f7; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
         .goal-title-text { font-size: 15px; color: #fff; font-weight: 600; }
-        .task-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-        .task-item { display: flex; align-items: center; justify-content: space-between; background: #070c18; padding: 12px 14px; border-radius: 10px; border: 1px solid #1e293b; font-size: 13px; }
-        .task-action { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .task-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+        .task-item { display: flex; align-items: center; justify-content: space-between; background: #070c18; padding: 10px 14px; border-radius: 8px; border: 1px solid #1e293b; }
+        .task-action { background: rgba(239, 68, 68, 0.1); color: #f87171; border: none; padding: 4px 8px; border-radius: 6px; font-size: 12px; cursor: pointer; }
         .task-action:hover { background: rgba(239, 68, 68, 0.25); }
-        .roadmap-output { display: none; background: #070c18; border: 1px solid #1e293b; padding: 14px; border-radius: 10px; margin-top: 8px; font-size: 13px; }
-        .roadmap-step { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
-        .step-num { background: #4f46e5; color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; flex-shrink: 0; margin-top: 2px; }
+        .roadmap-output { display: none; background: #070c18; border: 1px solid #1e293b; border-radius: 10px; padding: 14px; margin-top: 12px; }
+        .roadmap-step { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 13px; color: #cbd5e1; }
+        .step-num { background: #4f46e5; color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
         .footer-text { font-size: 11px; color: #475569; text-align: center; margin-top: 20px; }
-        
+
         #toast-box {
             position: fixed;
             bottom: 25px;
@@ -73,13 +73,24 @@
             </div>
         </div>
 
+        <!-- Live Progress Bar Section -->
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="color: #a855f7; font-weight: bold; font-size: 12px;">GOAL PROGRESS</span>
+                <span id="progress-text" style="color: #a855f7; font-weight: bold; font-size: 12px;">0%</span>
+            </div>
+            <div style="width: 100%; background-color: #070c18; border-radius: 8px; height: 8px; overflow: hidden; border: 1px solid #1e293b;">
+                <div id="progress-bar" style="width: 0%; background: linear-gradient(90deg, #8b5cf6, #ec4899); height: 100%; transition: width 0.3s ease;"></div>
+            </div>
+        </div>
+
         <!-- Daily Action Plan Card -->
         <div class="card">
             <div class="card-title">📅 Daily Action Plan</div>
             <div class="card-sub">Add daily tasks synced live with your backend.</div>
             
             <input type="text" id="taskInput" class="input-box" placeholder="e.g. Complete 1 exercise (15 mins)">
-            <button type="button" class="btn btn-secondary" onclick="addTask()">➕ Add Task</button>
+            <button type="button" class="btn btn-secondary" onclick="addTask()">+ Add Task</button>
             
             <div class="task-list" id="taskList"></div>
         </div>
@@ -91,100 +102,123 @@
             <button type="button" class="btn btn-primary" onclick="generateRoadmap()">⚡ Generate AI Roadmap</button>
             
             <div class="roadmap-output" id="roadmapResult">
-                <div style="font-weight:700; color:#fff; margin-bottom:10px;" id="resultTitle">🤖 Generated Roadmap</div>
+                <div style="font-weight:700; color:#fff; margin-bottom:10px;" id="resultTitle">🤖 Roadmap</div>
                 <div id="stepsContainer"></div>
             </div>
         </div>
 
         <div class="footer-text">© 2026 Goal AI • Empowering Creators & Achievers</div>
-
     </div>
 
     <div id="toast-box"></div>
 
-    <script>
-        function showToast(msg) {
-            let toast = document.getElementById('toast-box');
-            toast.innerText = msg;
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+<script>
+    function showToast(msg) {
+        let toast = document.getElementById('toast-box');
+        toast.innerText = msg;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    }
+
+    async function saveGoal() {
+        const val = document.getElementById('goalInput').value.trim();
+        if(!val) {
+            showToast('⚠️ Please enter a goal!');
+            return;
         }
 
-        async function saveGoal() {
-            const val = document.getElementById('goalInput').value.trim();
-            if(!val) {
-                showToast('⚠️ Please enter a goal!');
-                return;
+        document.getElementById('displayGoalName').innerText = val;
+        document.getElementById('activeGoalBox').style.display = 'block';
+        document.getElementById('goalInput').value = '';
+        showToast('💾 Goal Saved Successfully!');
+
+        try {
+            await fetch('/api/goals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: val })
+            });
+        } catch(e) {}
+    }
+
+    function addTask() {
+        const input = document.getElementById('taskInput');
+        const taskVal = input.value.trim();
+        if (!taskVal) {
+            showToast('⚠️ Please enter a task!');
+            return;
+        }
+        
+        appendTaskUI(taskVal);
+        input.value = '';
+        showToast('Task Added!');
+
+        fetch('/api/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ task: taskVal })
+        }).catch(e => console.log('Backend sync bypassed:', e));
+    }
+
+    function generateRoadmap() {
+        const activeGoal = document.getElementById('displayGoalName').innerText;
+        const resultBox = document.getElementById('roadmapResult');
+        const stepsContainer = document.getElementById('stepsContainer');
+        document.getElementById('resultTitle').innerText = `🤖 Roadmap: ${activeGoal !== 'None' ? activeGoal : 'General Goal'}`;
+
+        const steps = [
+            "Phase 1: Define core objectives and set daily target milestones.",
+            "Phase 2: Complete practical foundational tasks systematically.",
+            "Phase 3: Work on small execution projects & test progress.",
+            "Phase 4: Review final outcomes and refine consistency."
+        ];
+
+        stepsContainer.innerHTML = steps.map((step, idx) => `
+            <div class="roadmap-step">
+                <div class="step-num">${idx + 1}</div>
+                <div>${step}</div>
+            </div>
+        `).join('');
+
+        resultBox.style.display = 'block';
+        showToast('⚡ Roadmap Generated!');
+    }
+
+    function appendTaskUI(text) {
+        const listContainer = document.getElementById('taskList');
+        const item = document.createElement('div');
+        item.className = 'task-item';
+        item.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px;">
+                <input type="checkbox" onchange="updateProgressBar()" style="width:16px; height:16px; cursor:pointer;">
+                <span style="color:#fff;">${text}</span>
+            </div>
+            <button class="task-action" onclick="this.parentElement.remove(); updateProgressBar();">Delete</button>
+        `;
+        listContainer.appendChild(item);
+        updateProgressBar();
+    }
+
+    function updateProgressBar() {
+        const tasks = document.querySelectorAll('#taskList .task-item');
+        if (tasks.length === 0) {
+            document.getElementById('progress-bar').style.width = "0%";
+            document.getElementById('progress-text').innerText = "0%";
+            return;
+        }
+
+        let completedCount = 0;
+        tasks.forEach(task => {
+            const checkbox = task.querySelector('input[type="checkbox"]');
+            if (checkbox && checkbox.checked) {
+                completedCount++;
             }
+        });
 
-            document.getElementById('displayGoalName').innerText = val;
-            document.getElementById('activeGoalBox').style.display = 'block';
-            document.getElementById('goalInput').value = '';
-            showToast('💾 Goal Saved Successfully!');
-
-            try {
-                await fetch('/api/goals', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title: val })
-                });
-            } catch(e) {}
-        }
-
-        async function addTask() {
-            const taskVal = document.getElementById('taskInput').value.trim();
-            if(!taskVal) {
-                showToast('⚠️ Please enter a task!');
-                return;
-            }
-
-            appendTaskUI(taskVal);
-            document.getElementById('taskInput').value = '';
-            showToast('✅ Task Added!');
-
-            try {
-                await fetch('/api/tasks', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ task: taskVal })
-                });
-            } catch(e) {}
-        }
-
-        function generateRoadmap() {
-            const activeGoal = document.getElementById('displayGoalName').innerText;
-            const resultBox = document.getElementById('roadmapResult');
-            const stepsContainer = document.getElementById('stepsContainer');
-            document.getElementById('resultTitle').innerText = `🤖 Roadmap: ${activeGoal !== 'None' ? activeGoal : 'Your Goal'}`;
-            
-            const steps = [
-                "Phase 1: Define core objectives and set daily target milestones.",
-                "Phase 2: Complete practical foundational tasks systematically.",
-                "Phase 3: Work on small execution projects & test progress.",
-                "Phase 4: Review final outcomes and refine consistency."
-            ];
-
-            stepsContainer.innerHTML = steps.map((step, idx) => `
-                <div class="roadmap-step">
-                    <div class="step-num">${idx + 1}</div>
-                    <div>${step}</div>
-                </div>
-            `).join('');
-
-            resultBox.style.display = 'block';
-            showToast('⚡ Roadmap Generated!');
-        }
-
-        function appendTaskUI(text) {
-            const listContainer = document.getElementById('taskList');
-            const item = document.createElement('div');
-            item.className = 'task-item';
-            item.innerHTML = `
-                <span>${text}</span>
-                <button class="task-action" onclick="this.parentElement.remove(); showToast('🗑️ Task Deleted');">Delete</button>
-            `;
-            listContainer.appendChild(item);
-        }
-    </script>
+        const percentage = Math.round((completedCount / tasks.length) * 100);
+        document.getElementById('progress-bar').style.width = percentage + "%";
+        document.getElementById('progress-text').innerText = percentage + "%";
+    }
+</script>
 </body>
 </html>
