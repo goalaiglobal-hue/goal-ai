@@ -205,5 +205,17 @@
 
         loadData();
     </script>
+
+<script>
+// Auto-fetch data and update streak count safely
+fetch('/api/data')
+  .then(res => res.json())
+  .then(data => {
+      if(data.streak !== undefined) {
+          document.getElementById('streak-count').innerText = data.streak;
+      }
+  }).catch(err => console.log(err));
+</script>
 </body>
+
 </html>
