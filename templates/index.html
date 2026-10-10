@@ -187,13 +187,7 @@ function appendTaskUI(text) {
     const listContainer = document.getElementById('taskList');
     const item = document.createElement('div');
     item.className = 'task-item';
-    item.innerHTML = `
-        <div style="display:flex; align-items:center; gap:10px;">
-            <input type="checkbox" onchange="updateProgressBar(); saveProgress();" style="width:16px; height:16px; cursor:pointer;">
-            <span style="color:#fff;">${text}</span>
-        </div>
-        <button class="task-action" onclick="this.parentElement.remove(); updateProgressBar(); saveProgress();">Delete</button>
-    `;
+    item.innerHTML = ;
     listContainer.appendChild(item);
     updateProgressBar();
 }}
