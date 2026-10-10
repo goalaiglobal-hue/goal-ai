@@ -190,7 +190,7 @@
         item.className = 'task-item';
         item.innerHTML = `
             <div style="display:flex; align-items:center; gap:10px;">
-                <input type="checkbox" onchange="updateProgressBar()" style="width:16px; height:16px; cursor:pointer;">
+onchange="updateProgressBar(); saveProgress();"
                 <span style="color:#fff;">${text}</span>
             </div>
             <button class="task-action" onclick="this.parentElement.remove(); updateProgressBar();">Delete</button>
@@ -219,6 +219,26 @@
         document.getElementById('progress-bar').style.width = percentage + "%";
         document.getElementById('progress-text').innerText = percentage + "%";
     }
+// LocalStorage me progress save aur load karne ka function
+function saveProgress() {
+    const checkboxes = document.querySelectorAll('#taskList input[type="checkbox"]');
+    const status = Array.from(checkboxes).map(cb => cb.checked);
+    localStorage.setItem('goal_tasks', JSON.stringify(status));
+}
+
+function loadSavedProgress() {
+    const saved = localStorage.getItem('goal_tasks');
+    if (!saved) return;
+    const status = JSON.parse(saved);
+    const checkboxes = document.querySelectorAll('#taskList input[type="checkbox"]');
+    checkboxes.forEach((cb, index) => {
+        if (status[index] !== undefined) cb.checked = status[index];
+    });
+    updateProgressBar();
+}
+
+// Page load hone par restore karo
+document.addEventListener('DOMContentLoaded', loadSavedProgress);
 </script>
 </body>
 </html>
