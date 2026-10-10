@@ -69,7 +69,9 @@ def get_data():
         res = requests.get(f'{SUPABASE_URL}/rest/v1/user_goals?user_id=eq.{uid}', headers=get_headers(), timeout=10)
         if res.status_code == 200 and res.json():
             r = res.json()[0]
-            return jsonify({'goal': r.get('goal', ''), 'tasks': r.get('tasks', []), 'streak': r.get('streak_count', 0)})
+            streak_val = r.get('streak_count', 0) or 0;
+            if r.get('goal') and streak_val == 0: streak_val = 1
+            return jsonify({'goal': r.get('goal', ''), 'tasks': r.get('tasks', []), 'streak': streak_val})
     except: pass
     return jsonify({'goal': '', 'tasks': [], 'streak': 0})
 
