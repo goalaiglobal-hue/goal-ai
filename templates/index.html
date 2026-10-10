@@ -8,17 +8,23 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center p-4 selection:bg-indigo-500 selection:text-white">
     
-    <!-- Header -->
-    <header class="w-full max-w-2xl flex items-center justify-between py-4 mb-6 border-b border-slate-800/80">
-        <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/30">AI</div>
-            <h1 class="text-lg font-extrabold tracking-wider bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">GOAL AI</h1>
-        </div>
+    <!-- Top Bar (Email & Logout) -->
+    <header class="w-full max-w-2xl flex items-center justify-between py-2 mb-2 border-b border-slate-800/60">
+        <span class="text-xs text-slate-500 font-semibold tracking-wide uppercase">Goal AI SaaS</span>
         <div class="flex items-center space-x-3">
-            <span class="text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl hidden sm:inline-block">{{ user_email }}</span>
-            <a href="/logout" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-semibold px-3 py-1.5 rounded-xl transition">Logout</a>
+            <span class="text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1 rounded-xl hidden sm:inline-block">{{ user_email }}</span>
+            <a href="/logout" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-semibold px-3 py-1 rounded-xl transition">Logout</a>
         </div>
     </header>
+
+    <!-- Original Center Brand Banner -->
+    <div class="text-center my-6 space-y-2">
+        <div class="inline-flex w-12 h-12 rounded-full bg-indigo-600/30 border border-indigo-500/50 items-center justify-center font-extrabold text-indigo-400 shadow-xl shadow-indigo-600/20 mb-1">
+            AI
+        </div>
+        <h1 class="text-2xl font-black tracking-wider text-white uppercase">GOAL AI</h1>
+        <p class="text-[11px] font-medium tracking-widest text-slate-400 uppercase">Plan • Focus • Achieve Your Dreams</p>
+    </div>
 
     <!-- Main Container -->
     <main class="w-full max-w-2xl space-y-6">
