@@ -7,8 +7,8 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'goalai-secret-key-2026')
 
 OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY', '')
-SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
-SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
+SUPABASE_URL = os.environ.get('SUPABASE_URL', '').strip()
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '').strip()
 
 def get_supabase_headers():
     return {
