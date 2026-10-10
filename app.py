@@ -1,9 +1,10 @@
 import os
 import re
 import requests
-from flask import Flask, render_template, request, jsonify, make_response
+from flask import Flask, render_template, request, jsonify, make_response, session, redirect
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'goalai-secret-key-2026')
 
 OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY', '')
 SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
@@ -19,38 +20,120 @@ def get_supabase_headers():
 
 @app.route('/')
 def index():
-    rendered = render_template('index.html')
+    if 'user_id' not in session:
+        return redirect('/login')
+    rendered = render_template('index.html', user_email=session.get('user_email', ''))
     response = make_response(rendered)
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
     return response
 
+@app.route('/login')
+def login_page():
+    if 'user_id' in session:
+        return redirect('/')
+    return render_template('login.html')
+
+@app.route('/signup')
+def signup_page():
+    if 'user_id' in session:
+        return redirect('/')
+    return render_template('signup.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
+
+@app.route('/api/signup', methods=['POST'])
+def api_signup():
+    data = request.get_json() or {}
+    email = data.get('email', '').strip().lower()
+    password = data.get('password', '').strip()
+    
+    if not email or not password:
+        return jsonify({'error': 'Email and Password are required'}), 400
+        
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        return jsonify({'error': 'Database not configured'}), 500
+        
+    try:
+        res = requests.get(f'{SUPABASE_URL}/rest/v1/app_users?email=eq.{email}', headers=get_supabase_headers(), timeout=10)
+        if res.status_code == 200 and len(res.json()) > 0:
+            return jsonify({'error': 'Email already registered! Please login.'}), 400
+            
+        payload = {'email': email, 'password': password}
+        res_create = requests.post(f'{SUPABASE_URL}/rest/v1/app_users', headers=get_supabase_headers(), json=payload, timeout=10)
+        
+        if res_create.status_code in [200, 201]:
+            user = res_create.json()[0]
+            session['user_id'] = user['id']
+            session['user_email'] = user['email']
+            return jsonify({'status': 'success', 'message': 'Account created successfully!'})
+        else:
+            return jsonify({'error': 'Failed to create account'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    data = request.get_json() or {}
+    email = data.get('email', '').strip().lower()
+    password = data.get('password', '').strip()
+    
+    if not email or not password:
+        return jsonify({'error': 'Email and Password are required'}), 400
+        
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        return jsonify({'error': 'Database not configured'}), 500
+        
+    try:
+        res = requests.get(f'{SUPABASE_URL}/rest/v1/app_users?email=eq.{email}&password=eq.{password}', headers=get_supabase_headers(), timeout=10)
+        if res.status_code == 200:
+            users = res.json()
+            if users:
+                user = users[0]
+                session['user_id'] = user['id']
+                session['user_email'] = user['email']
+                return jsonify({'status': 'success', 'message': 'Logged in successfully!'})
+            else:
+                return jsonify({'error': 'Invalid Email or Password'}), 401
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+        
+    return jsonify({'error': 'Login failed'}), 400
+
 @app.route('/api/data', methods=['GET'])
 def get_data():
-    if not SUPABASE_URL or not SUPABASE_KEY:
+    user_id = session.get('user_id')
+    if not user_id or not SUPABASE_URL or not SUPABASE_KEY:
         return jsonify({'goal': '', 'tasks': []})
     
     try:
-        res = requests.get(f'{SUPABASE_URL}/rest/v1/user_goals?id=eq.1', headers=get_supabase_headers(), timeout=10)
+        res = requests.get(f'{SUPABASE_URL}/rest/v1/user_goals?user_id=eq.{user_id}', headers=get_supabase_headers(), timeout=10)
         if res.status_code == 200:
             rows = res.json()
             if rows:
                 return jsonify({'goal': rows[0].get('goal', ''), 'tasks': rows[0].get('tasks', [])})
     except Exception as e:
-        print('Supabase Fetch Error:', e)
+        print('Fetch Error:', e)
         
     return jsonify({'goal': '', 'tasks': []})
 
 @app.route('/api/data', methods=['POST'])
 def save_data():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Unauthorized'}), 401
+        
     data = request.get_json() or {}
     goal = data.get('goal', '')
     tasks = data.get('tasks', [])
     
     if not SUPABASE_URL or not SUPABASE_KEY:
-        return jsonify({'status': 'success', 'message': 'Saved locally (Supabase not configured)'})
+        return jsonify({'status': 'success'})
         
     try:
-        payload = {'id': 1, 'goal': goal, 'tasks': tasks}
+        payload = {'id': user_id, 'user_id': user_id, 'goal': goal, 'tasks': tasks}
         res = requests.post(
             f'{SUPABASE_URL}/rest/v1/user_goals',
             headers={**get_supabase_headers(), 'Prefer': 'resolution=merge-duplicates'},
@@ -58,12 +141,11 @@ def save_data():
             timeout=10
         )
         if res.status_code in [200, 201]:
-            return jsonify({'status': 'success', 'message': 'Synced with Supabase successfully!'})
+            return jsonify({'status': 'success'})
         else:
-            return jsonify({'status': 'error', 'message': res.text}), 400
+            return jsonify({'error': res.text}), 400
     except Exception as e:
-        print('Supabase Save Error:', e)
-        return jsonify({'status': 'error', 'message': str(e)}), 500
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/roadmap', methods=['POST'])
 def generate_roadmap():
@@ -106,7 +188,7 @@ def generate_roadmap():
                 if len(steps) >= 4:
                     return jsonify({'steps': steps[:4]})
     except Exception as e:
-        print('AI Generation Exception:', e)
+        print('AI Exception:', e)
 
     fallback_steps = [
         f'Phase 1: Define core objectives and set daily target milestones for {goal}.',
