@@ -183,22 +183,20 @@
         resultBox.style.display = 'block';
         showToast('⚡ Roadmap Generated!');
     }
-
-    function appendTaskUI(text) {
-        const listContainer = document.getElementById('taskList');
-        const item = document.createElement('div');
-        item.className = 'task-item';
-        item.innerHTML = `
-            <div style="display:flex; align-items:center; gap:10px;">
-onchange="updateProgressBar(); saveProgress();"
-                <span style="color:#fff;">${text}</span>
-            </div>
-            <button class="task-action" onclick="this.parentElement.remove(); updateProgressBar();">Delete</button>
-        `;
-        listContainer.appendChild(item);
-        updateProgressBar();
-    }
-
+function appendTaskUI(text) {
+    const listContainer = document.getElementById('taskList');
+    const item = document.createElement('div');
+    item.className = 'task-item';
+    item.innerHTML = `
+        <div style="display:flex; align-items:center; gap:10px;">
+            <input type="checkbox" onchange="updateProgressBar(); saveProgress();" style="width:16px; height:16px; cursor:pointer;">
+            <span style="color:#fff;">${text}</span>
+        </div>
+        <button class="task-action" onclick="this.parentElement.remove(); updateProgressBar(); saveProgress();">Delete</button>
+    `;
+    listContainer.appendChild(item);
+    updateProgressBar();
+}}
     function updateProgressBar() {
         const tasks = document.querySelectorAll('#taskList .task-item');
         if (tasks.length === 0) {
