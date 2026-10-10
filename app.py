@@ -97,7 +97,7 @@ def save_data():
 
         payload = {'id': uid, 'user_id': uid, 'goal': goal, 'tasks': tasks, 'streak_count': current_streak, 'last_active_date': last_date_str}
         res = requests.post(f'{SUPABASE_URL}/rest/v1/user_goals', headers={**get_headers(), 'Prefer': 'resolution=merge-duplicates'}, json=payload, timeout=10)
-        if res.status_code in [200, 201]: return jsonify({'status': 'success', 'streak': current_streak})
+        if res.status_code in [200, 201]: return jsonify({'status': 'success', 'streak': max(1, current_streak)})
     except Exception as e: return jsonify({'error': str(e)}), 500
     return jsonify({'status': 'success', 'streak': 0})
 
