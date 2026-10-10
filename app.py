@@ -6,6 +6,16 @@ from flask import Flask, render_template, request, jsonify, make_response
 app = Flask(__name__)
 
 OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY', '')
+SUPABASE_URL = os.environ.get('SUPABASE_URL', '')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY', '')
+
+def get_supabase_headers():
+    return {
+        'apikey': SUPABASE_KEY,
+        'Authorization': f'Bearer {SUPABASE_KEY}',
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+    }
 
 @app.route('/')
 def index():
@@ -13,6 +23,47 @@ def index():
     response = make_response(rendered)
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
     return response
+
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        return jsonify({'goal': '', 'tasks': []})
+    
+    try:
+        res = requests.get(f'{SUPABASE_URL}/rest/v1/user_goals?id=eq.1', headers=get_supabase_headers(), timeout=10)
+        if res.status_code == 200:
+            rows = res.json()
+            if rows:
+                return jsonify({'goal': rows[0].get('goal', ''), 'tasks': rows[0].get('tasks', [])})
+    except Exception as e:
+        print('Supabase Fetch Error:', e)
+        
+    return jsonify({'goal': '', 'tasks': []})
+
+@app.route('/api/data', methods=['POST'])
+def save_data():
+    data = request.get_json() or {}
+    goal = data.get('goal', '')
+    tasks = data.get('tasks', [])
+    
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        return jsonify({'status': 'success', 'message': 'Saved locally (Supabase not configured)'})
+        
+    try:
+        payload = {'id': 1, 'goal': goal, 'tasks': tasks}
+        res = requests.post(
+            f'{SUPABASE_URL}/rest/v1/user_goals',
+            headers={**get_supabase_headers(), 'Prefer': 'resolution=merge-duplicates'},
+            json=payload,
+            timeout=10
+        )
+        if res.status_code in [200, 201]:
+            return jsonify({'status': 'success', 'message': 'Synced with Supabase successfully!'})
+        else:
+            return jsonify({'status': 'error', 'message': res.text}), 400
+    except Exception as e:
+        print('Supabase Save Error:', e)
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/api/roadmap', methods=['POST'])
 def generate_roadmap():
@@ -54,11 +105,6 @@ def generate_roadmap():
                 
                 if len(steps) >= 4:
                     return jsonify({'steps': steps[:4]})
-            else:
-                print('OpenRouter API Response Error:', response.status_code, response.text)
-        else:
-            print('OPENROUTER_API_KEY is missing in environment variables!')
-        
     except Exception as e:
         print('AI Generation Exception:', e)
 
