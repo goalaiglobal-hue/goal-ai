@@ -65,7 +65,7 @@
             <button class="btn" style="width: auto;" onclick="saveGoal()">Save Goal</button>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
-            <span>GOAL PROGRESS</span>
+            <span>ACTIVE GOAL: <strong id="activeGoalText" style="color: var(--accent-glow);">None set</strong></span>
             <span id="progressText">0%</span>
         </div>
         <div class="progress-bar-bg">
@@ -97,6 +97,7 @@
     let currentGoal = '';
     let tasks = [];
     let roadmapSteps = [];
+    
     function updateProgress() {
         if (tasks.length === 0) {
             document.getElementById('progressBar').style.width = '0%';
@@ -108,6 +109,7 @@
         document.getElementById('progressBar').style.width = percentage + '%';
         document.getElementById('progressText').innerText = percentage + '%';
     }
+    
     function renderTasks() {
         const list = document.getElementById('taskList');
         list.innerHTML = '';
@@ -119,18 +121,33 @@
         });
         updateProgress();
     }
+    
     function saveGoal() {
         const val = document.getElementById('goalInput').value.trim();
-        if (val) { currentGoal = val; alert('Goal saved successfully!'); }
+        if (val) {
+            currentGoal = val;
+            document.getElementById('activeGoalText').innerText = val;
+            alert('Goal saved successfully: ' + val);
+        } else {
+            alert('Please enter a valid goal first!');
+        }
     }
+    
     function addTask() {
         const input = document.getElementById('taskInput');
         const text = input.value.trim();
         if (text) { tasks.push({ text: text, completed: false }); input.value = ''; renderTasks(); }
     }
+    
+    function toggleTask(index) { tasks[index].completed = !tasks[index].completed; renderTasks(); }
     function deleteTask(index) { tasks.splice(index, 1); renderTasks(); }
+    
     async function generateRoadmap() {
         const goal = document.getElementById('goalInput').value.trim() || currentGoal;
+        if (!goal) { alert('Please enter or save a goal first!'); return; }
+        currentGoal = goal;
+        document.getElementById('activeGoalText').innerText = goal;
+        
         const btn = document.getElementById('generateBtn');
         const btnText = document.getElementById('btnText');
         btnText.innerHTML = '<span class="loader"></span> Generating AI Plan...';
@@ -142,6 +159,7 @@
         } catch (err) { console.error(err); alert('Error generating roadmap!'); }
         finally { btnText.innerHTML = '⚡ Generate AI Roadmap'; btn.disabled = false; }
     }
+    
     function renderRoadmap(goal) {
         const container = document.getElementById('roadmapContainer');
         const list = document.getElementById('roadmapList');
@@ -156,7 +174,9 @@
         });
         container.style.display = 'block';
     }
+    
     function importTask(stepText, btnElement) {
+        if (!tasks.some(t => t.text === stepText)) {
             tasks.push({ text: stepText, completed: false });
             renderTasks();
             if (btnElement) {
@@ -169,7 +189,8 @@
             }
         }
     }
-    function escapeHtml(text) { return text.replace(/'/g, "\'").replace(/"/g, '&quot;'); }
+    
+    function escapeHtml(text) { return text.replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
 </script>
 </body>
 </html>
