@@ -1,7 +1,7 @@
 import os
 import re
 import requests
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response
 
 app = Flask(__name__)
 
@@ -9,7 +9,10 @@ OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY', '')
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    rendered = render_template('index.html')
+    response = make_response(rendered)
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    return response
 
 @app.route('/api/roadmap', methods=['POST'])
 def generate_roadmap():
@@ -31,12 +34,12 @@ def generate_roadmap():
             prompt = f"You are Goal AI, an elite productivity assistant. Generate a crisp, highly actionable 4-phase execution roadmap for the following goal: '{goal}'. Provide exactly 4 phases. Keep each phase clear, impactful, and direct under 20 words per phase. Format your response EXACTLY as 4 lines, starting with Phase 1:, Phase 2:, Phase 3:, Phase 4:"
 
             payload = {
-                'model': 'google/gemini-2.0-flash-lite-001',
+                'model': 'meta-llama/llama-3.3-70b-instruct:free',
                 'messages': [{'role': 'user', 'content': prompt}],
                 'temperature': 0.7
             }
             
-            response = requests.post('https://openrouter.ai/api/v1/chat/completions', json=payload, headers=headers, timeout=10)
+            response = requests.post('https://openrouter.ai/api/v1/chat/completions', json=payload, headers=headers, timeout=12)
             
             if response.status_code == 200:
                 ai_data = response.json()
@@ -51,6 +54,10 @@ def generate_roadmap():
                 
                 if len(steps) >= 4:
                     return jsonify({'steps': steps[:4]})
+            else:
+                print('OpenRouter API Response Error:', response.status_code, response.text)
+        else:
+            print('OPENROUTER_API_KEY is missing in environment variables!')
         
     except Exception as e:
         print('AI Generation Exception:', e)
