@@ -126,27 +126,32 @@
     }
 
     function generateRoadmap() {
-        const activeGoalName = document.getElementById('displayGoalName')?.innerText || activeGoal || "Your Goal";
+        const goalVal = document.getElementById('goalInput').value.trim() || activeGoal || "Your Goal";
         const resultBox = document.getElementById('roadmapResult');
         const stepsContainer = document.getElementById('stepsContainer');
-        document.getElementById('resultTitle').innerText = `🤖 Roadmap: ${activeGoalName}`;
+        
+        document.getElementById('resultTitle').innerText = `🤖 AI Roadmap: ${goalVal}`;
+        showToast('⚡ Generating Roadmap...');
 
-        const steps = [
-            "Phase 1: Define core objectives and set daily target milestones.",
-            "Phase 2: Complete practical foundational tasks systematically.",
-            "Phase 3: Work on small execution projects & test progress.",
-            "Phase 4: Review final outcomes and refine consistency."
-        ];
-
-        stepsContainer.innerHTML = steps.map((step, idx) => `
-            <div class="roadmap-step">
-                <div class="step-num">${idx + 1}</div>
-                <div>${step}</div>
-            </div>
-        `).join('');
-
-        resultBox.style.display = 'block';
-        showToast('⚡ Roadmap Generated!');
+        fetch('/api/roadmap', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ goal: goalVal })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.steps) {
+                stepsContainer.innerHTML = data.steps.map((step, idx) => `
+                    <div class="roadmap-step">
+                        <div class="step-num">${idx + 1}</div>
+                        <div>${step}</div>
+                    </div>
+                `).join('');
+                resultBox.style.display = 'block';
+                showToast('🎯 Roadmap Ready!');
+            }
+        })
+        .catch(err => console.error('Error generating roadmap:', err));
     }
 
     function appendTaskUI(text, isChecked = false) {
