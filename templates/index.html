@@ -3,194 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal AI - Smart SaaS Platform</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --card-border: #334155;
-            --accent-purple: #6366f1;
-            --accent-glow: #818cf8;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #10b981;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 2rem 1rem; }
-        .container { width: 100%; max-width: 650px; display: flex; flex-direction: column; gap: 1.5rem; }
-        .header { text-align: center; margin-bottom: 0.5rem; }
-        .avatar { width: 48px; height: 48px; background: linear-gradient(135deg, #a855f7, #6366f1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4); }
-        .header h1 { font-size: 1.5rem; letter-spacing: 1px; font-weight: 700; }
-        .header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem; }
-        .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.25rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
-        .card-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
-        .card-subtitle { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem; }
-        .input-group { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
-        input[type="text"] { flex: 1; background: #0f172a; border: 1px solid var(--card-border); border-radius: 8px; padding: 0.65rem 0.85rem; color: var(--text-main); font-size: 0.88rem; outline: none; }
-        input[type="text"]:focus { border-color: var(--accent-purple); }
-        .btn { background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; border: none; border-radius: 8px; padding: 0.65rem 1rem; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; }
-        .progress-bar-bg { width: 100%; height: 6px; background: #0f172a; border-radius: 3px; overflow: hidden; margin-top: 0.5rem; }
-        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #6366f1, #ec4899); transition: width 0.4s ease; }
-        .task-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem; }
-        .task-item { background: #0f172a; border: 1px solid var(--card-border); border-radius: 8px; padding: 0.6rem 0.85rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem; }
-        .task-left { display: flex; align-items: center; gap: 0.6rem; flex: 1; }
-        .task-checkbox { accent-color: var(--accent-purple); width: 16px; height: 16px; cursor: pointer; }
-        .completed { text-decoration: line-through; color: var(--text-muted); }
-        .btn-delete { background: transparent; color: #ef4444; border: none; font-size: 0.75rem; cursor: pointer; }
-        .roadmap-list { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.75rem; }
-        .roadmap-item { background: #0f172a; border: 1px solid var(--card-border); border-radius: 8px; padding: 0.75rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
-        .roadmap-left { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
-        .badge { background: var(--accent-purple); color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; flex-shrink: 0; }
-        .roadmap-text { font-size: 0.85rem; line-height: 1.3; }
-        .btn-import { background: #1e293b; color: #818cf8; border: 1px solid #475569; border-radius: 6px; padding: 0.35rem 0.6rem; font-size: 0.72rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
-        .btn-import:hover { background: var(--accent-purple); color: white; border-color: var(--accent-purple); }
-        .imported-badge { color: var(--success); font-size: 0.72rem; font-weight: 600; }
-        .loader { border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid white; border-radius: 50%; width: 14px; height: 14px; animation: spin 0.8s linear infinite; display: inline-block; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+    <title>Goal AI - SaaS Productivity Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-<div class="container">
-    <div class="header">
-        <div class="avatar">AI</div>
-        <h1>GOAL AI</h1>
-        <p>Plan • Focus • Achieve Your Dreams</p>
-    </div>
-    <div class="card">
-        <div class="card-title">🎯 Set Your Goal</div>
-        <div class="card-subtitle">Define your main focus target</div>
-        <div class="input-group">
-            <input type="text" id="goalInput" placeholder="e.g. Master Python Programming in 30 Days">
-            <button class="btn" style="width: auto;" onclick="saveGoal()">Save Goal</button>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col items-center justify-start p-4 sm:p-6">
+
+    <!-- Header Section -->
+    <header class="w-full max-w-2xl text-center my-6">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-indigo-600/20 text-indigo-400 font-bold text-xl mb-3 border border-indigo-500/30">
+            AI
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
-            <span>ACTIVE GOAL: <strong id="activeGoalText" style="color: var(--accent-glow);">None set</strong></span>
-            <span id="progressText">0%</span>
-        </div>
-        <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="progressBar"></div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-title">📋 Daily Action Plan</div>
-        <div class="card-subtitle">Manage daily action tasks for your goal</div>
-        <div class="input-group">
-            <input type="text" id="taskInput" placeholder="Add a new daily task...">
-        </div>
-        <button class="btn" onclick="addTask()">+ Add Task</button>
-        <div class="task-list" id="taskList"></div>
-    </div>
-    <div class="card">
-        <div class="card-title">🧩 AI Roadmap Generator</div>
-        <div class="card-subtitle">Generate a 4-phase execution plan for your active goal</div>
-        <button class="btn" id="generateBtn" onclick="generateRoadmap()">
-            <span id="btnText">⚡ Generate AI Roadmap</span>
-        </button>
-        <div id="roadmapContainer" style="display: none; margin-top: 1rem;">
-            <div style="font-size: 0.8rem; color: var(--accent-glow); font-weight: 600; margin-bottom: 0.5rem;" id="roadmapTitle">🤖 AI Roadmap Milestones:</div>
-            <div class="roadmap-list" id="roadmapList"></div>
-        </div>
-    </div>
-</div>
-<script>
-    let currentGoal = '';
-    let tasks = [];
-    let roadmapSteps = [];
-    
-    function updateProgress() {
-        if (tasks.length === 0) {
-            document.getElementById('progressBar').style.width = '0%';
-            document.getElementById('progressText').innerText = '0%';
-            return;
-        }
-        const completed = tasks.filter(t => t.completed).length;
-        const percentage = Math.round((completed / tasks.length) * 100);
-        document.getElementById('progressBar').style.width = percentage + '%';
-        document.getElementById('progressText').innerText = percentage + '%';
-    }
-    
-    function renderTasks() {
-        const list = document.getElementById('taskList');
-        list.innerHTML = '';
-        tasks.forEach((task, index) => {
-            const item = document.createElement('div');
-            item.className = 'task-item';
-            item.innerHTML = `<div class="task-left"><input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index})"><span class="${task.completed ? 'completed' : ''}">${task.text}</span></div><button class="btn-delete" onclick="deleteTask(${index})">Delete</button>`;
-            list.appendChild(item);
-        });
-        updateProgress();
-    }
-    
-    function saveGoal() {
-        const val = document.getElementById('goalInput').value.trim();
-        if (val) {
-            currentGoal = val;
-            document.getElementById('activeGoalText').innerText = val;
-            alert('Goal saved successfully: ' + val);
-        } else {
-            alert('Please enter a valid goal first!');
-        }
-    }
-    
-    function addTask() {
-        const input = document.getElementById('taskInput');
-        const text = input.value.trim();
-        if (text) { tasks.push({ text: text, completed: false }); input.value = ''; renderTasks(); }
-    }
-    
-    function toggleTask(index) { tasks[index].completed = !tasks[index].completed; renderTasks(); }
-    function deleteTask(index) { tasks.splice(index, 1); renderTasks(); }
-    
-    async function generateRoadmap() {
-        const goal = document.getElementById('goalInput').value.trim() || currentGoal;
-        if (!goal) { alert('Please enter or save a goal first!'); return; }
-        currentGoal = goal;
-        document.getElementById('activeGoalText').innerText = goal;
-        
-        const btn = document.getElementById('generateBtn');
-        const btnText = document.getElementById('btnText');
-        btnText.innerHTML = '<span class="loader"></span> Generating AI Plan...';
-        btn.disabled = true;
-        try {
-            const res = await fetch('/api/roadmap', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ goal: goal }) });
-            const data = await res.json();
-            if (data.steps && data.steps.length > 0) { roadmapSteps = data.steps; renderRoadmap(goal); }
-        } catch (err) { console.error(err); alert('Error generating roadmap!'); }
-        finally { btnText.innerHTML = '⚡ Generate AI Roadmap'; btn.disabled = false; }
-    }
-    
-    function renderRoadmap(goal) {
-        const container = document.getElementById('roadmapContainer');
-        const list = document.getElementById('roadmapList');
-        document.getElementById('roadmapTitle').innerText = `🤖 AI Roadmap for: "${goal}"`;
-        list.innerHTML = '';
-        roadmapSteps.forEach((step, idx) => {
-            const isImported = tasks.some(t => t.text === step);
-            const item = document.createElement('div');
-            item.className = 'roadmap-item';
-            item.innerHTML = `<div class="roadmap-left"><div class="badge">${idx + 1}</div><div class="roadmap-text">${step}</div></div>${isImported ? '<span class="imported-badge">✓ Added</span>' : `<button class="btn-import" onclick="importTask('${escapeHtml(step)}', this)">+ Add Task</button>`}`;
-            list.appendChild(item);
-        });
-        container.style.display = 'block';
-    }
-    
-    function importTask(stepText, btnElement) {
-        if (!tasks.some(t => t.text === stepText)) {
-            tasks.push({ text: stepText, completed: false });
-            renderTasks();
-            if (btnElement) {
-                const parent = btnElement.parentElement;
-                btnElement.remove();
-                const badge = document.createElement('span');
-                badge.className = 'imported-badge';
-                badge.innerText = '✓ Added';
-                parent.appendChild(badge);
+        <h1 class="text-3xl font-extrabold tracking-tight text-white mb-1">GOAL AI</h1>
+        <p class="text-xs font-medium text-slate-400 uppercase tracking-widest">Plan • Focus • Achieve Your Dreams</p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-2xl space-y-6">
+
+        <!-- Active Goal Box -->
+        <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-sm">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="text-rose-500">🎯</span>
+                <h2 class="text-sm font-semibold text-slate-200">Set Your Goal</h2>
+            </div>
+            <p class="text-xs text-slate-400 mb-3">Define your main focus target</p>
+            
+            <div class="flex flex-col sm:flex-row gap-2">
+                <input type="text" id="goalInput" placeholder="e.g. Master Python Programming in 30 Days" class="flex-1 bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                <button onclick="saveGoal()" class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-medium text-sm px-5 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+                    Save Goal
+                </button>
+            </div>
+
+            <div class="mt-4 flex justify-between items-center text-xs text-slate-400 pt-3 border-t border-slate-800/60">
+                <div>ACTIVE GOAL: <span id="activeGoalText" class="text-indigo-400 font-medium">None set</span></div>
+                <div><span id="progressText">0%</span></div>
+            </div>
+        </section>
+
+        <!-- Daily Action Plan -->
+        <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-sm">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="text-amber-400">📋</span>
+                <h2 class="text-sm font-semibold text-slate-200">Daily Action Plan</h2>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">Manage daily action tasks for your goal</p>
+
+            <div class="space-y-2 mb-4">
+                <input type="text" id="taskInput" placeholder="Add a new daily task..." class="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                <button onclick="addTask()" class="w-full bg-indigo-600/90 hover:bg-indigo-600 active:scale-95 text-white font-medium text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+                    + Add Task
+                </button>
+            </div>
+
+            <div id="taskList" class="space-y-2">
+                <!-- Dynamic Tasks Render Here -->
+            </div>
+        </section>
+
+        <!-- AI Roadmap Generator -->
+        <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl backdrop-blur-sm">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="text-emerald-400">🧩</span>
+                <h2 class="text-sm font-semibold text-slate-200">AI Roadmap Generator</h2>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">Generate a 4-phase execution plan for your active goal</p>
+
+            <button onclick="generateRoadmap()" id="roadmapBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-semibold text-sm py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20">
+                ⚡ Generate AI Roadmap
+            </button>
+
+            <div id="roadmapResults" class="mt-4 space-y-2 hidden">
+                <div class="text-xs font-medium text-indigo-400 mb-2 flex items-center gap-1.5">
+                    <span>🤖</span> AI Roadmap for: <span id="roadmapGoalTitle" class="italic">""</span>
+                </div>
+                <div id="roadmapList" class="space-y-2"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        let appState = {
+            goal: '',
+            tasks: []
+        };
+
+        // Load data on start
+        window.addEventListener('DOMContentLoaded', loadCloudData);
+
+        async function loadCloudData() {
+            try {
+                const res = await fetch('/api/data');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.goal) {
+                        appState.goal = data.goal;
+                        document.getElementById('goalInput').value = data.goal;
+                        document.getElementById('activeGoalText').innerText = data.goal;
+                    }
+                    if (data.tasks) {
+                        appState.tasks = data.tasks;
+                        renderTasks();
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to load cloud data:', err);
             }
         }
-    }
-    
-    function escapeHtml(text) { return text.replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
-</script>
+
+        async function syncCloudData() {
+            try {
+                await fetch('/api/data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(appState)
+                });
+            } catch (err) {
+                console.error('Sync failed:', err);
+            }
+        }
+
+        function saveGoal() {
+            const val = document.getElementById('goalInput').value.trim();
+            if (!val) {
+                alert('Please enter a goal first!');
+                return;
+            }
+            appState.goal = val;
+            document.getElementById('activeGoalText').innerText = val;
+            syncCloudData();
+            alert('Goal saved successfully: ' + val);
+        }
+
+        function addTask(taskText = null) {
+            const input = document.getElementById('taskInput');
+            const text = taskText || input.value.trim();
+            
+            if (!text) {
+                alert('Task description cannot be empty!');
+                return;
+            }
+
+            appState.tasks.push({ text: text, done: false });
+            if (!taskText) input.value = '';
+            
+            renderTasks();
+            syncCloudData();
+        }
+
+        function toggleTask(index) {
+            appState.tasks[index].done = !appState.tasks[index].done;
+            renderTasks();
+            syncCloudData();
+        }
+
+        function deleteTask(index) {
+            appState.tasks.splice(index, 1);
+            renderTasks();
+            syncCloudData();
+        }
+
+        function renderTasks() {
+            const list = document.getElementById('taskList');
+            list.innerHTML = '';
+
+            let doneCount = 0;
+
+            appState.tasks.forEach((task, idx) => {
+                if (task.done) doneCount++;
+
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between bg-slate-950/60 border border-slate-800/80 rounded-xl p-3 text-sm transition';
+                
+                item.innerHTML = `
+                    <div class="flex items-center gap-3 flex-1 cursor-pointer" onclick="toggleTask(${idx})">
+                        <input type="checkbox" ${task.done ? 'checked' : ''} class="w-4 h-4 accent-indigo-500 rounded cursor-pointer">
+                        <span class="${task.done ? 'line-through text-slate-500' : 'text-slate-200'}">${task.text}</span>
+                    </div>
+                    <button onclick="deleteTask(${idx})" class="text-slate-500 hover:text-rose-400 text-xs px-2 py-1 transition">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                `;
+                list.appendChild(item);
+            });
+
+            // Update Progress Percentage
+            const total = appState.tasks.length;
+            const pct = total === 0 ? 0 : Math.round((doneCount / total) * 100);
+            document.getElementById('progressText').innerText = pct + '%';
+        }
+
+        async function generateRoadmap() {
+            if (!appState.goal) {
+                alert('Please set and save an Active Goal first!');
+                return;
+            }
+
+            const btn = document.getElementById('roadmapBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⚡ Generating AI Roadmap...';
+
+            try {
+                const res = await fetch('/api/roadmap', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ goal: appState.goal })
+                });
+
+                const data = await res.json();
+                if (data.steps && data.steps.length > 0) {
+                    document.getElementById('roadmapGoalTitle').innerText = '"' + appState.goal + '"';
+                    const list = document.getElementById('roadmapList');
+                    list.innerHTML = '';
+
+                    data.steps.forEach((step, idx) => {
+                        const stepBox = document.createElement('div');
+                        stepBox.className = 'flex items-center justify-between bg-slate-950/70 border border-slate-800 rounded-xl p-3 text-xs';
+                        stepBox.innerHTML = `
+                            <div class="flex items-start gap-2.5 flex-1 pr-2">
+                                <span class="w-5 h-5 rounded-full bg-indigo-600/30 text-indigo-400 font-bold flex items-center justify-center shrink-0 text-[10px]">
+                                    ${idx + 1}
+                                </span>
+                                <span class="text-slate-300 leading-relaxed">${step}</span>
+                            </div>
+                            <button onclick="addTask('${step.replace(/'/g, "\\'")}')" class="bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 px-2.5 py-1.5 rounded-lg text-[11px] transition shrink-0">
+                                + Add Task
+                            </button>
+                        `;
+                        list.appendChild(stepBox);
+                    });
+
+                    document.getElementById('roadmapResults').classList.remove('hidden');
+                } else {
+                    alert('Could not generate roadmap. Please try again.');
+                }
+            } catch (err) {
+                alert('Error connecting to AI service.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '⚡ Generate AI Roadmap';
+            }
+        }
+    </script>
 </body>
 </html>
