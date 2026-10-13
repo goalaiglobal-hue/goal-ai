@@ -166,3 +166,12 @@ def update_xp():
 @app.route('/.well-known/assetlinks.json')
 def serve_assetlinks():
     return send_from_directory('static/.well-known', 'assetlinks.json', mimetype='application/json')
+
+
+@app.route('/manifest.json')
+def serve_manifest():
+    return send_from_directory('static', 'manifest.json', mimetype='application/json')
+
+@app.route('/sw.js')
+def serve_sw():
+    return send_from_directory('static', 'sw.js', mimetype='application/javascript')

@@ -12,7 +12,14 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     </style>
-    <link rel="manifest" href="/static/manifest.json">
+    <link rel="manifest" href="/manifest.json">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
 
