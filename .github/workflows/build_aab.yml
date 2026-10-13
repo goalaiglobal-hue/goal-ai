@@ -1,0 +1,36 @@
+name: Build Android TWA Package
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Bubblewrap CLI
+        run: npm install -g @bubblewrap/cli
+
+      - name: Initialize Bubblewrap Project
+        run: |
+          bubblewrap init --manifest=https://goal-ai-dw76.onrender.com/manifest.json --directory=twa-app
+
+      - name: Build Android Bundle (AAB)
+        run: |
+          cd twa-app
+          bubblewrap build
+
+      - name: Upload AAB Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: goal-ai-playstore-aab
+          path: twa-app/*.aab
