@@ -18,15 +18,19 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install PWABuilder CLI
-        run: npm install -g @pwabuilder/cli
+      - name: Setup Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: Build Android Package
-        run: |
-          pwabuilder Android --manifest ./manifest.json --out ./output --signing false
+      - name: Build Android App Bundle
+        uses: pwabuilder/pwabuilder-action@v1
+        with:
+          manifest-url: 'https://raw.githubusercontent.com/goalaiglobal-hue/goal-ai/main/manifest.json'
 
       - name: Upload AAB Artifact
         uses: actions/upload-artifact@v4
         with:
           name: goal-ai-playstore-aab
-          path: ./output/**/*
+          path: ./**/*.aab
