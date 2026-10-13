@@ -107,7 +107,23 @@
                     body: JSON.stringify({ message: msg })
                 });
                 const data = await res.json();
-                chatContainer.innerHTML += `<div class="max-w-2xl mx-auto flex gap-3 items-start"><div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">AI</div><div class="bg-slate-900 border border-slate-800 text-slate-200 text-xs px-4 py-3 rounded-2xl whitespace-pre-line">${data.reply}</div></div>`;
+                
+                const taskId = 'task-' + Date.now();
+                chatContainer.innerHTML += `
+                    <div class="max-w-2xl mx-auto flex gap-3 items-start">
+                        <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-md shadow-indigo-600/30">AI</div>
+                        <div class="bg-slate-900 border border-slate-800 text-slate-200 text-xs px-4 py-3 rounded-2xl whitespace-pre-line space-y-3 max-w-[85%]">
+                            <p>${data.reply}</p>
+                            <div class="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
+                                <span class="text-[10px] text-indigo-400 font-semibold">+50 XP Available</span>
+                                <button id="${taskId}" onclick="completeActionTask('${taskId}')" class="bg-indigo-600/20 border border-indigo-500/40 hover:bg-indigo-600 text-indigo-300 hover:text-white px-3 py-1 rounded-lg text-[11px] font-medium transition flex items-center gap-1">
+                                    <span>⚡</span> Complete & Claim XP
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
             } catch(err) {
                 chatContainer.innerHTML += `<p class="text-xs text-red-400 text-center">Failed to connect to Goal AI server.</p>`;
             }
@@ -135,6 +151,17 @@
             }
         }
 
+        
+        async function completeActionTask(buttonId) {
+            const btn = document.getElementById(buttonId);
+            if(btn && !btn.disabled) {
+                btn.disabled = true;
+                btn.className = "bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 px-3 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1 cursor-not-allowed";
+                btn.innerHTML = "<span>✅</span> Claimed +50 XP!";
+                await addXP(50);
+            }
+        }
+    
         function logout() { window.location.href = '/logout'; }
     </script>
 </body>
