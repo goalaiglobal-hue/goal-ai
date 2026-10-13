@@ -180,3 +180,16 @@ def serve_sw():
 @app.route('/pwa-bundle')
 def pwa_bundle():
     return "PWA Manifest, Service Worker, and Assetlinks are 100% active and ready for Play Store TWA!"
+from flask import send_from_directory
+
+@app.route('/manifest.json')
+def serve_manifest():
+    return send_from_directory('.', 'manifest.json')
+
+@app.route('/goal-ai-512.png')
+def serve_icon512():
+    return send_from_directory('.', 'goal-ai-512.png')
+
+@app.route('/goal-ai-192.png')
+def serve_icon192():
+    return send_from_directory('.', 'goal-ai-192.png')
