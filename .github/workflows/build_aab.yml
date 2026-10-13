@@ -27,9 +27,9 @@ jobs:
       - name: Install Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
-      - name: Initialize and Build App
+      - name: Initialize and Build App from Local Manifest
         run: |
-          npx @bubblewrap/cli init --manifest=https://goal-ai-dw76.onrender.com/manifest.json --skipAsking
+          npx @bubblewrap/cli init --manifest=./manifest.json --skipAsking
           npx @bubblewrap/cli build
 
       - name: Upload AAB Artifact
