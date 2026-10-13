@@ -113,6 +113,28 @@
             }
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
+        
+        let currentXP = 0;
+
+        async function addXP(amount = 50) {
+            try {
+                const res = await fetch('/api/update-xp', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ xp: amount })
+                });
+                const data = await res.json();
+                if(data.success) {
+                    currentXP += amount;
+                    const newLevel = Math.floor(currentXP / 100) + 1;
+                    document.getElementById('user-xp').innerText = currentXP;
+                    document.getElementById('user-level').innerText = newLevel;
+                }
+            } catch(e) {
+                console.error("XP update failed", e);
+            }
+        }
+
         function logout() { window.location.href = '/logout'; }
     </script>
 </body>

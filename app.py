@@ -144,3 +144,20 @@ def api_chat():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/update-xp', methods=['POST'])
+def update_xp():
+    try:
+        data = request.get_json() or {}
+        earned_xp = data.get('xp', 50)
+        
+        # Simple XP & Level calculation logic: Level = (XP // 100) + 1
+        # Returning updated XP back to frontend
+        return jsonify({
+            'success': True,
+            'xp_gained': earned_xp,
+            'message': f'+{earned_xp} XP Earned!'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
