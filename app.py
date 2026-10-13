@@ -6,7 +6,7 @@ def calculate_level_and_xp(current_xp, added_xp=0):
 
 import os, re, requests
 from datetime import datetime, date
-from flask import Flask, render_template, request, jsonify, make_response, session, redirect
+from flask import send_from_directory, Flask, render_template, request, jsonify, make_response, session, redirect
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'goalai-secret-key-2026')
@@ -161,3 +161,8 @@ def update_xp():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/.well-known/assetlinks.json')
+def serve_assetlinks():
+    return send_from_directory('static/.well-known', 'assetlinks.json', mimetype='application/json')
