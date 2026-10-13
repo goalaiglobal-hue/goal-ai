@@ -12,14 +12,25 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build Android App Bundle (AAB)
-        uses: pwa-builder/pwa-action@v1.0.1
+      - name: Setup Java JDK 17
+        uses: actions/setup-java@v4
         with:
-          pwa-url: 'https://goal-ai-dw76.onrender.com'
-          output-type: 'aab'
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: Upload AAB Artifact
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install PWABuilder CLI
+        run: npm install -g @pwabuilder/cli
+
+      - name: Package Android App
+        run: pwabuilder Android https://goal-ai-dw76.onrender.com -o ./output
+
+      - name: Upload AAB & APK Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: goal-ai-playstore-aab
-          path: ./*.aab
+          path: output/**/*
