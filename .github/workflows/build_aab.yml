@@ -22,15 +22,15 @@ jobs:
 
       - name: Initialize Bubblewrap Project
         run: |
-          bubblewrap init --manifest=https://goal-ai-dw76.onrender.com/manifest.json --directory=twa-app
+          npx @bubblewrap/cli init --manifest=https://goal-ai-dw76.onrender.com/manifest.json --directory=twa-app --skipAsking
 
       - name: Build Android Bundle (AAB)
         run: |
           cd twa-app
-          bubblewrap build
+          npx @bubblewrap/cli build --skipAsking
 
       - name: Upload AAB Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: goal-ai-playstore-aab
           path: twa-app/*.aab
