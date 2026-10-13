@@ -4,7 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Goal AI - Elite Productivity</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com">
+function updateXPAndLevel(earnedXP) {
+    let currentXP = parseInt(document.getElementById('user-xp')?.innerText || '0') + earnedXP;
+    let newLevel = Math.floor(currentXP / 100) + 1;
+    
+    if (document.getElementById('user-xp')) document.getElementById('user-xp').innerText = currentXP;
+    if (document.getElementById('user-level')) document.getElementById('user-level').innerText = newLevel;
+}
+
+</script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center p-4 selection:bg-indigo-500 selection:text-white">
     
@@ -206,7 +215,16 @@
         }
 
         loadData();
-    </script>
+    
+function updateXPAndLevel(earnedXP) {
+    let currentXP = parseInt(document.getElementById('user-xp')?.innerText || '0') + earnedXP;
+    let newLevel = Math.floor(currentXP / 100) + 1;
+    
+    if (document.getElementById('user-xp')) document.getElementById('user-xp').innerText = currentXP;
+    if (document.getElementById('user-level')) document.getElementById('user-level').innerText = newLevel;
+}
+
+</script>
 
 <script>
 // Auto-fetch data and update streak count safely
@@ -217,6 +235,15 @@ fetch('/api/data')
           document.getElementById('streak-count').innerText = data.streak;
       }
   }).catch(err => console.log(err));
+
+function updateXPAndLevel(earnedXP) {
+    let currentXP = parseInt(document.getElementById('user-xp')?.innerText || '0') + earnedXP;
+    let newLevel = Math.floor(currentXP / 100) + 1;
+    
+    if (document.getElementById('user-xp')) document.getElementById('user-xp').innerText = currentXP;
+    if (document.getElementById('user-level')) document.getElementById('user-level').innerText = newLevel;
+}
+
 </script>
 </body>
 
