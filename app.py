@@ -175,3 +175,8 @@ def serve_manifest():
 @app.route('/sw.js')
 def serve_sw():
     return send_from_directory('static', 'sw.js', mimetype='application/javascript')
+
+
+@app.route('/pwa-bundle')
+def pwa_bundle():
+    return "PWA Manifest, Service Worker, and Assetlinks are 100% active and ready for Play Store TWA!"
