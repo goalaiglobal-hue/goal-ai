@@ -8,29 +8,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Java JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
-      - name: Install PWABuilder CLI
-        run: npm install -g @pwabuilder/cli
+      - name: Build Android App Bundle
+        run: |
+          npx @pwabuilder/cli Android https://goal-ai-dw76.onrender.com -o ./output
 
-      - name: Package Android App
-        run: pwabuilder Android https://goal-ai-dw76.onrender.com -o ./output
-
-      - name: Upload AAB & APK Artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: goal-ai-playstore-aab
-          path: output/**/*
+          path: ./output/**/*
