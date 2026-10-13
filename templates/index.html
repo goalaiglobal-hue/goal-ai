@@ -17,14 +17,30 @@ function updateXPAndLevel(earnedXP) {
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center p-4 selection:bg-indigo-500 selection:text-white">
     
-    <!-- Top Bar (Email & Logout) -->
+    <!-- Top Bar (Email & 
+<div id="xp-badge" class="inline-flex items-center gap-1 bg-indigo-900/60 border border-indigo-500/40 text-indigo-300 px-2 py-1 rounded-lg text-xs font-semibold mx-1">
+    ⚡ <span id="user-xp">0</span> XP
+</div>
+<div id="level-badge" class="inline-flex items-center gap-1 bg-purple-900/60 border border-purple-500/40 text-purple-300 px-2 py-1 rounded-lg text-xs font-semibold mr-1">
+    👑 Lvl <span id="user-level">1</span>
+</div>
+
+Logout) -->
     <header class="w-full max-w-2xl flex items-center justify-between py-2 mb-2 border-b border-slate-800/60">
         <span class="text-xs text-slate-500 font-semibold tracking-wide uppercase">Goal AI SaaS</span>
         <div class="flex items-center space-x-3">
             <span class="text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1 rounded-xl hidden sm:inline-block">{{ user_email }}</span>
     
     <span class="text-xs text-amber-400 bg-slate-900 border border-amber-500/30 px-3 py-1 rounded-xl font-semibold shadow-md flex items-center gap-1">🔥 <span id="streak-count">1</span> Days</span>
-            <a href="/logout" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-semibold px-3 py-1 rounded-xl transition">Logout</a>
+            <a href="/logout" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-semibold px-3 py-1 rounded-xl transition">
+<div id="xp-badge" class="inline-flex items-center gap-1 bg-indigo-900/60 border border-indigo-500/40 text-indigo-300 px-2 py-1 rounded-lg text-xs font-semibold mx-1">
+    ⚡ <span id="user-xp">0</span> XP
+</div>
+<div id="level-badge" class="inline-flex items-center gap-1 bg-purple-900/60 border border-purple-500/40 text-purple-300 px-2 py-1 rounded-lg text-xs font-semibold mr-1">
+    👑 Lvl <span id="user-level">1</span>
+</div>
+
+Logout</a>
         </div>
     </header>
 
