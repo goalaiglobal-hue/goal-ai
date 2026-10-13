@@ -1,4 +1,4 @@
-name: Build Android TWA Package
+name: Build Android App Bundle
 
 on:
   push:
@@ -10,13 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
 
       - name: Setup Java JDK 17
         uses: actions/setup-java@v4
@@ -24,12 +19,23 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build Android App Bundle
-        uses: pwabuilder/pwabuilder-action@v1
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
         with:
-          manifest-url: 'https://raw.githubusercontent.com/goalaiglobal-hue/goal-ai/main/manifest.json'
+          node-version: 20
 
-      - name: Upload AAB Artifact
+      - name: Install Bubblewrap CLI
+        run: npm install -g @bubblewrap/cli
+
+      - name: Generate TWA Project Configuration
+        run: |
+          npx @bubblewrap/cli init --manifest=https://raw.githubusercontent.com/goalaiglobal-hue/goal-ai/main/manifest.json --meta=twa-manifest.json
+
+      - name: Build Android Bundle (AAB)
+        run: |
+          npx @bubblewrap/cli build --manifest=twa-manifest.json
+
+      - name: Upload AAB Package
         uses: actions/upload-artifact@v4
         with:
           name: goal-ai-playstore-aab
