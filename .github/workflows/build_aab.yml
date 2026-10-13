@@ -13,27 +13,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Java JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install Bubblewrap CLI
-        run: npm install -g @bubblewrap/cli
+      - name: Install PWABuilder CLI
+        run: npm install -g @pwabuilder/cli
 
-      - name: Initialize and Build App from Local Manifest
+      - name: Build Android Package
         run: |
-          npx @bubblewrap/cli init --manifest=./manifest.json --skipAsking
-          npx @bubblewrap/cli build
+          pwabuilder Android --manifest ./manifest.json --out ./output --signing false
 
       - name: Upload AAB Artifact
         uses: actions/upload-artifact@v4
         with:
           name: goal-ai-playstore-aab
-          path: ./**/*.aab
+          path: ./output/**/*
