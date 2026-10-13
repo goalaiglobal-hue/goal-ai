@@ -1,3 +1,9 @@
+
+def calculate_level_and_xp(current_xp, added_xp=0):
+    total_xp = current_xp + added_xp
+    level = (total_xp // 100) + 1
+    return total_xp, level
+
 import os, re, requests
 from datetime import datetime, date
 from flask import Flask, render_template, request, jsonify, make_response, session, redirect
