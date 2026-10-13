@@ -128,3 +128,19 @@ def generate_roadmap():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+
+@app.route('/api/chat', methods=['POST'])
+def api_chat():
+    try:
+        data = request.get_json() or {}
+        user_message = data.get('message', '').strip()
+        if not user_message:
+            return jsonify({'error': 'Message required'}), 400
+        ai_reply = f"Here is a strategic plan for your request: '{user_message}'.\n\n1. Break down into 15-min daily action blocks.\n2. Track key milestones under your Active Goal.\n3. Complete daily tasks to earn +50 XP!"
+        return jsonify({
+            'reply': ai_reply,
+            'suggested_tasks': [f"Action Item: {user_message[:30]}... Step 1", f"Action Item: {user_message[:30]}... Step 2"]
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

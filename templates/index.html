@@ -1,268 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal AI - Elite Productivity</title>
-    <script src="https://cdn.tailwindcss.com">
-function updateXPAndLevel(earnedXP) {
-    let currentXP = parseInt(document.getElementById('user-xp')?.innerText || '0') + earnedXP;
-    let newLevel = Math.floor(currentXP / 100) + 1;
-    
-    if (document.getElementById('user-xp')) document.getElementById('user-xp').innerText = currentXP;
-    if (document.getElementById('user-level')) document.getElementById('user-level').innerText = newLevel;
-}
-
-</script>
+    <title>Goal AI - Gemini Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center p-4 selection:bg-indigo-500 selection:text-white">
-    
-    <!-- Top Bar (Email & 
-<div id="xp-badge" class="inline-flex items-center gap-1 bg-indigo-900/60 border border-indigo-500/40 text-indigo-300 px-2 py-1 rounded-lg text-xs font-semibold mx-1">
-    ⚡ <span id="user-xp">0</span> XP
-</div>
-<div id="level-badge" class="inline-flex items-center gap-1 bg-purple-900/60 border border-purple-500/40 text-purple-300 px-2 py-1 rounded-lg text-xs font-semibold mr-1">
-    👑 Lvl <span id="user-level">1</span>
-</div>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
 
-Logout) -->
-    <header class="w-full max-w-2xl flex items-center justify-between py-2 mb-2 border-b border-slate-800/60">
-        <span class="text-xs text-slate-500 font-semibold tracking-wide uppercase">Goal AI SaaS</span>
-        <div class="flex items-center space-x-3">
-            <span class="text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1 rounded-xl hidden sm:inline-block">{{ user_email }}</span>
-    
-    <span class="text-xs text-amber-400 bg-slate-900 border border-amber-500/30 px-3 py-1 rounded-xl font-semibold shadow-md flex items-center gap-1">🔥 <span id="streak-count">1</span> Days</span>
-            <a href="/logout" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-semibold px-3 py-1 rounded-xl transition">
-<div id="xp-badge" class="inline-flex items-center gap-1 bg-indigo-900/60 border border-indigo-500/40 text-indigo-300 px-2 py-1 rounded-lg text-xs font-semibold mx-1">
-    ⚡ <span id="user-xp">0</span> XP
-</div>
-<div id="level-badge" class="inline-flex items-center gap-1 bg-purple-900/60 border border-purple-500/40 text-purple-300 px-2 py-1 rounded-lg text-xs font-semibold mr-1">
-    👑 Lvl <span id="user-level">1</span>
-</div>
+    <!-- TOP HEADER -->
+    <header class="h-14 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md px-4 flex items-center justify-between sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <button onclick="toggleSidebar()" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition lg:hidden">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-xs shadow-lg shadow-indigo-500/20">AI</div>
+                <span class="font-bold tracking-wider text-sm bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">GOAL AI</span>
+            </div>
+        </div>
 
-Logout</a>
+        <!-- GAMIFICATION BADGES -->
+        <div class="flex items-center gap-2">
+            <div id="streak-badge" class="inline-flex items-center gap-1.5 bg-amber-950/40 border border-amber-500/30 text-amber-300 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-sm">
+                <span>🔥</span> <span id="streak-count">2</span> Days
+            </div>
+            <div id="xp-badge" class="inline-flex items-center gap-1.5 bg-indigo-950/60 border border-indigo-500/40 text-indigo-300 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-sm">
+                <span>⚡</span> <span id="user-xp">0</span> XP
+            </div>
+            <div id="level-badge" class="inline-flex items-center gap-1.5 bg-purple-950/60 border border-purple-500/40 text-purple-300 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-sm">
+                <span>👑</span> Lvl <span id="user-level">1</span>
+            </div>
+            <button onclick="logout()" class="ml-1 text-xs bg-red-950/30 border border-red-500/30 text-red-300 px-3 py-1 rounded-lg hover:bg-red-900/50 transition">Logout</button>
         </div>
     </header>
 
-    <!-- Original Center Brand Banner -->
-    <div class="text-center my-6 space-y-2">
-        <div class="inline-flex w-12 h-12 rounded-full bg-indigo-600/30 border border-indigo-500/50 items-center justify-center font-extrabold text-indigo-400 shadow-xl shadow-indigo-600/20 mb-1">
-            AI
-        </div>
-        <h1 class="text-2xl font-black tracking-wider text-white uppercase">GOAL AI</h1>
-        <p class="text-[11px] font-medium tracking-widest text-slate-400 uppercase">Plan • Focus • Achieve Your Dreams</p>
+    <div class="flex-1 flex overflow-hidden">
+        <!-- SIDEBAR (ChatGPT/Gemini Style Drawer) -->
+        <aside id="sidebar" class="w-64 border-r border-slate-800/80 bg-slate-900/40 flex flex-col hidden lg:flex transition-all">
+            <div class="p-3">
+                <button onclick="startNewChat()" class="w-full flex items-center gap-2 bg-indigo-600/20 border border-indigo-500/30 hover:bg-indigo-600/30 text-indigo-300 rounded-xl px-3 py-2 text-xs font-medium transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    New AI Goal Strategy
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-4">
+                <div>
+                    <p class="text-[10px] font-semibold tracking-wider text-slate-500 uppercase px-2 mb-2">Active Goal</p>
+                    <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-2.5">
+                        <p id="active-goal-text" class="text-xs font-medium text-slate-200">Master Python in 30 Days</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN AI CANVAS -->
+        <main class="flex-1 flex flex-col min-w-0 bg-slate-950">
+            <div id="chat-messages" class="flex-1 overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6">
+                <div class="max-w-2xl mx-auto text-center my-8 space-y-3">
+                    <h1 class="text-2xl lg:text-3xl font-extrabold bg-gradient-to-r from-slate-100 via-indigo-200 to-slate-400 bg-clip-text text-transparent">What do you want to achieve today?</h1>
+                    <p class="text-xs text-slate-400">Ask Goal AI to generate daily action plans, build roadmaps, or refine your goals.</p>
+                </div>
+            </div>
+
+            <!-- CHAT INPUT -->
+            <div class="p-3 lg:p-4 border-t border-slate-800/80 bg-slate-900/30">
+                <div class="max-w-3xl mx-auto space-y-2">
+                    <div class="flex gap-2 overflow-x-auto pb-1 text-xs text-slate-400 no-scrollbar">
+                        <button onclick="sendQuickPrompt('Generate a 7-day action roadmap for my goal')" class="bg-slate-800/60 border border-slate-700/50 px-3 py-1 rounded-full whitespace-nowrap">🎯 7-Day Roadmap</button>
+                        <button onclick="sendQuickPrompt('Suggest 3 high-impact daily tasks')" class="bg-slate-800/60 border border-slate-700/50 px-3 py-1 rounded-full whitespace-nowrap">⚡ Quick Tasks</button>
+                    </div>
+                    <form id="chat-form" onsubmit="handleChatSubmit(event)" class="relative flex items-center">
+                        <input type="text" id="chat-input" placeholder="Ask Goal AI anything or plan your goals..." class="w-full bg-slate-900 border border-slate-700/80 text-slate-100 text-xs rounded-2xl pl-4 pr-12 py-3 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                        <button type="submit" class="absolute right-2 p-1.5 bg-indigo-600 text-white rounded-xl">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- Main Container -->
-    <main class="w-full max-w-2xl space-y-6">
-        
-        <!-- Goal Card -->
-        <section class="bg-slate-900/80 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-5 shadow-2xl relative overflow-hidden">
-            <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center space-x-2">
-                    <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Set Your Goal</h2>
-                </div>
-                <span id="progress-text" class="text-xs font-bold text-indigo-400">0%</span>
-            </div>
-            
-            <div class="flex gap-2">
-                <input type="text" id="goal-input" placeholder="e.g. Master Python Programming in 30 Days" 
-                    class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition">
-                <button onclick="saveGoal()" class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-semibold text-xs px-5 rounded-xl transition shadow-lg shadow-indigo-600/20">
-                    Save Goal
-                </button>
-            </div>
-            <div class="mt-3 flex items-center justify-between text-xs text-slate-400">
-                <span>ACTIVE GOAL: <strong id="active-goal-display" class="text-slate-200">None set</strong></span>
-            </div>
-        </section>
-
-        <!-- Tasks Card -->
-        <section class="bg-slate-900/80 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-5 shadow-2xl">
-            <div class="flex items-center space-x-2 mb-3">
-                <span class="w-2 h-2 rounded-full bg-violet-500"></span>
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Daily Action Plan</h2>
-            </div>
-            <div class="flex gap-2 mb-4">
-                <input type="text" id="task-input" placeholder="Add a new daily task..." 
-                    class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition">
-                <button onclick="addTask()" class="bg-slate-800 hover:bg-slate-700 active:scale-95 text-white font-semibold text-xs px-5 rounded-xl transition border border-slate-700">
-                    + Add Task
-                </button>
-            </div>
-            <ul id="task-list" class="space-y-2.5 max-h-60 overflow-y-auto pr-1"></ul>
-        </section>
-
-        <!-- AI Roadmap Card -->
-        <section class="bg-slate-900/80 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-5 shadow-2xl">
-            <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center space-x-2">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">AI Roadmap Generator</h2>
-                </div>
-            </div>
-            <button onclick="generateRoadmap()" id="roadmap-btn" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold text-xs py-3 rounded-xl transition shadow-lg shadow-indigo-600/20 active:scale-[0.99]">
-                ⚡ Generate AI Roadmap
-            </button>
-            <div id="roadmap-container" class="mt-4 space-y-2.5"></div>
-        </section>
-
-    </main>
-
     <script>
-        let currentGoal = "";
-        let tasks = [];
-
-        async function loadData() {
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('hidden'); }
+        function sendQuickPrompt(text) { document.getElementById('chat-input').value = text; handleChatSubmit(new Event('submit')); }
+        async function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if(!msg) return;
+            const chatContainer = document.getElementById('chat-messages');
+            chatContainer.innerHTML += `<div class="max-w-2xl mx-auto flex gap-3 justify-end"><div class="bg-indigo-600 text-white text-xs px-4 py-2.5 rounded-2xl">${msg}</div></div>`;
+            input.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
             try {
-                const res = await fetch('/api/data');
-                const data = await res.json();
-                if (data.goal) {
-                    currentGoal = data.goal;
-                    document.getElementById('goal-input').value = currentGoal;
-                    document.getElementById('active-goal-display').innerText = currentGoal;
-                }
-                if (data.tasks) {
-                    tasks = data.tasks;
-                }
-                renderTasks();
-            } catch (e) {
-                console.error("Load Error:", e);
-            }
-        }
-
-        async function saveDataServer() {
-            await fetch('/api/data', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ goal: currentGoal, tasks: tasks })
-            });
-        }
-
-        function saveGoal() {
-            const val = document.getElementById('goal-input').value.trim();
-            if (!val) return alert("Please enter a valid goal!");
-            currentGoal = val;
-            document.getElementById('active-goal-display').innerText = currentGoal;
-            saveDataServer();
-            alert("Goal saved successfully!");
-        }
-
-        function addTask() {
-            const val = document.getElementById('task-input').value.trim();
-            if (!val) return;
-            tasks.push({ text: val, completed: false });
-            document.getElementById('task-input').value = "";
-            renderTasks();
-            saveDataServer();
-        }
-
-        function toggleTask(index) {
-            tasks[index].completed = !tasks[index].completed;
-            renderTasks();
-            saveDataServer();
-        }
-
-        function deleteTask(index) {
-            tasks.splice(index, 1);
-            renderTasks();
-            saveDataServer();
-        }
-
-        function renderTasks() {
-            const list = document.getElementById('task-list');
-            list.innerHTML = "";
-            if (tasks.length === 0) {
-                list.innerHTML = `<li class="text-xs text-slate-600 text-center py-3">No tasks added yet. Start planning above!</li>`;
-                document.getElementById('progress-text').innerText = "0%";
-                return;
-            }
-
-            let completedCount = 0;
-            tasks.forEach((t, i) => {
-                if (t.completed) completedCount++;
-                const li = document.createElement('li');
-                li.className = `flex items-center justify-between p-3 rounded-xl border transition ${t.completed ? 'bg-slate-950/40 border-slate-900 text-slate-500 line-through' : 'bg-slate-950 border-slate-800 text-slate-200'}`;
-                li.innerHTML = `
-                    <div class="flex items-center space-x-3 cursor-pointer flex-1" onclick="toggleTask(${i})">
-                        <input type="checkbox" ${t.completed ? 'checked' : ''} class="w-4 h-4 rounded accent-indigo-600 cursor-pointer">
-                        <span class="text-xs font-medium">${t.text}</span>
-                    </div>
-                    <button onclick="deleteTask(${i})" class="text-slate-600 hover:text-rose-400 text-xs px-2 py-1 transition">✕</button>
-                `;
-                list.appendChild(li);
-            });
-
-            const percent = Math.round((completedCount / tasks.length) * 100);
-            document.getElementById('progress-text').innerText = percent + "%";
-        }
-
-        async function generateRoadmap() {
-            if (!currentGoal) return alert("Please set and save a goal first!");
-            const btn = document.getElementById('roadmap-btn');
-            btn.innerText = "Generating AI Roadmap...";
-            btn.disabled = true;
-
-            try {
-                const res = await fetch('/api/roadmap', {
+                const res = await fetch('/api/chat', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ goal: currentGoal })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ message: msg })
                 });
                 const data = await res.json();
-                const container = document.getElementById('roadmap-container');
-                container.innerHTML = "";
-
-                if (data.steps) {
-                    data.steps.forEach((step, idx) => {
-                        const div = document.createElement('div');
-                        div.className = "p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-300 flex items-start space-x-3";
-                        div.innerHTML = `<span class="bg-indigo-600/20 text-indigo-400 font-bold px-2 py-0.5 rounded-md text-[10px]">0${idx+1}</span><span class="flex-1 mt-0.5">${step}</span>`;
-                        container.appendChild(div);
-                    });
-                }
-            } catch (e) {
-                alert("Failed to generate roadmap.");
-            } finally {
-                btn.innerText = "⚡ Generate AI Roadmap";
-                btn.disabled = false;
+                chatContainer.innerHTML += `<div class="max-w-2xl mx-auto flex gap-3 items-start"><div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">AI</div><div class="bg-slate-900 border border-slate-800 text-slate-200 text-xs px-4 py-3 rounded-2xl whitespace-pre-line">${data.reply}</div></div>`;
+            } catch(err) {
+                chatContainer.innerHTML += `<p class="text-xs text-red-400 text-center">Failed to connect to Goal AI server.</p>`;
             }
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
-
-        loadData();
-    
-function updateXPAndLevel(earnedXP) {
-    let currentXP = parseInt(document.getElementById('user-xp')?.innerText || '0') + earnedXP;
-    let newLevel = Math.floor(currentXP / 100) + 1;
-    
-    if (document.getElementById('user-xp')) document.getElementById('user-xp').innerText = currentXP;
-    if (document.getElementById('user-level')) document.getElementById('user-level').innerText = newLevel;
-}
-
-</script>
-
-<script>
-// Auto-fetch data and update streak count safely
-fetch('/api/data')
-  .then(res => res.json())
-  .then(data => {
-      if(data.streak !== undefined) {
-          document.getElementById('streak-count').innerText = data.streak;
-      }
-  }).catch(err => console.log(err));
-
-function updateXPAndLevel(earnedXP) {
-    let currentXP = parseInt(document.getElementById('user-xp')?.innerText || '0') + earnedXP;
-    let newLevel = Math.floor(currentXP / 100) + 1;
-    
-    if (document.getElementById('user-xp')) document.getElementById('user-xp').innerText = currentXP;
-    if (document.getElementById('user-level')) document.getElementById('user-level').innerText = newLevel;
-}
-
-</script>
+        function logout() { window.location.href = '/logout'; }
+    </script>
 </body>
-
 </html>
-
-<!-- update -->
