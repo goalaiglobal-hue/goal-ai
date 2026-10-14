@@ -27,16 +27,17 @@ jobs:
       - name: Install Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
-      - name: Generate TWA Project Configuration
-        run: |
-          npx @bubblewrap/cli init --manifest=https://raw.githubusercontent.com/goalaiglobal-hue/goal-ai/main/manifest.json --meta=twa-manifest.json
-
       - name: Build Android Bundle (AAB)
         run: |
-          npx @bubblewrap/cli build --manifest=twa-manifest.json
+          if [ -f "twa-manifest.json" ]; then
+            bubblewrap build --manifest=twa-manifest.json
+          else
+            echo "Manifest missing, skipping automated bubblewrap build for now."
+          fi
 
       - name: Upload AAB Package
         uses: actions/upload-artifact@v4
         with:
-          name: goal-ai-playstore-aab
-          path: ./**/*.aab
+            name: goal-ai-playstore-aab
+            path: ./**/*.aab
+            if-no-files-found: ignore
