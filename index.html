@@ -15,20 +15,7 @@
   padding:0;
   font-family:Arial,sans-serif;
 }
-/* ChatGPT / Gemini style floating input fix */
-div[style*="position: fixed"], form, footer, .chat-bar, .input-wrapper {
-    position: fixed !important;
-    bottom: 24px !important;
-    left: 16px !important;
-    right: 16px !important;
-    width: auto !important;
-    max-width: 600px !important;
-    margin: 0 auto !important;
-    border-radius: 28px !important;
-    background: #1a1a24 !important;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    z-index: 99999 !important;
+
 }
 body{
   min-height:100vh;
@@ -236,6 +223,21 @@ footer{
   opacity:.45;
   font-size:13px;
 }
+  /* ChatGPT / Gemini Floating Bar Fix */
+    body > div, form, .input-area, .chat-container, footer {
+        position: fixed !important;
+        bottom: 24px !important;
+        left: 16px !important;
+        right: 16px !important;
+        width: calc(100% - 32px) !important;
+        max-width: 600px !important;
+        margin: 0 auto !important;
+        border-radius: 28px !important;
+        background: #13131a !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        z-index: 99999 !important;
+    }
 </style>
 </head>
 
