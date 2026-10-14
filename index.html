@@ -223,26 +223,26 @@ footer{
   opacity:.45;
   font-size:13px;
 }
-  /* Universal Floating Chat Bar Fix */
-div:has(> input[placeholder*="Ask Goal AI"]),
-form:has(input),
-div:has(> input) {
+  /* Perfect ChatGPT & Gemini Floating Bar */
+.chat-input-container {
     position: fixed !important;
-    bottom: 25px !important;
+    bottom: 24px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: 90% !important;
     max-width: 600px !important;
-    background: #13131a !important;
-    border-radius: 30px !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    z-index: 999999 !important;
+    background: rgba(20, 20, 35, 0.9) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 32px !important;
+    padding: 10px 18px !important;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5) !important;
+    z-index: 9999 !important;
 }
 
-/* Page ke bottom me space taaki kuch chhipe na */
 body {
-    padding-bottom: 100px !important;
+    padding-bottom: 120px !important; /* Screen ke niche content chhupne se rokne ke liye */
 }
 </style>
 </head>
