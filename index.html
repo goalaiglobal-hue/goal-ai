@@ -223,23 +223,26 @@ footer{
   opacity:.45;
   font-size:13px;
 }
-/* ChatGPT Style Floating Input Fix */
-body {
-    padding-bottom: 90px !important;
-}
-
-#goalArea, form, .card:last-of-type {
+  /* Universal Floating Chat Bar Fix */
+div:has(> input[placeholder*="Ask Goal AI"]),
+form:has(input),
+div:has(> input) {
     position: fixed !important;
-    bottom: 20px !important;
+    bottom: 25px !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    width: calc(100% - 32px) !important;
-    max-width: 550px !important;
+    width: 90% !important;
+    max-width: 600px !important;
     background: #13131a !important;
-    border-radius: 24px !important;
+    border-radius: 30px !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    z-index: 99999 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    z-index: 999999 !important;
+}
+
+/* Page ke bottom me space taaki kuch chhipe na */
+body {
+    padding-bottom: 100px !important;
 }
 </style>
 </head>
