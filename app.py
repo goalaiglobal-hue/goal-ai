@@ -4,13 +4,12 @@ import requests
 
 app = Flask(__name__)
 
-# Direct fallback configuration so it never fails on Termux or Render
 SUPABASE_URL = os.environ.get("SUPABASE_URL") or "https://aybfoxieispekcoedvjzho.supabase.co"
 SUPABASE_URL = SUPABASE_URL.rstrip("/")
 if not SUPABASE_URL.endswith("/rest/v1"):
     SUPABASE_URL += "/rest/v1"
 
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY") or "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." # Apni Supabase anon key yahan paste kar sakte ho
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY") or "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
 headers = {
     "apikey": SUPABASE_KEY,
@@ -31,18 +30,16 @@ def get_goals():
         )
         data = r.json()
         if isinstance(data, list):
-            cleaned_data = []
+            cleaned = []
             for item in data:
-                text = item.get("goal") or item.get("title") or item.get("text") or "Untitled Goal"
-                cleaned_data.append({
+                text = item.get("goal") or item.get("title") or item.get("text") or "Goal"
+                cleaned.append({
                     "id": item.get("id"),
                     "goal": text,
-                    "title": text,
-                    "category": item.get("category", "General"),
-                    "progress": item.get("progress", 0)
+                    "title": text
                 })
-            return jsonify(cleaned_data), 200
-        return jsonify(data), r.status_code
+            return jsonify(cleaned), 200
+        return jsonify([]), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -54,9 +51,7 @@ def add_goal():
     if not goal_text:
         return jsonify({"error": "Goal text missing!"}), 400
 
-    payload = {
-        "goal": goal_text
-    }
+    payload = {"goal": goal_text}
 
     try:
         r = requests.post(
@@ -68,34 +63,11 @@ def add_goal():
             json=payload
         )
         res_data = r.json()
-        return jsonify(res_data), r.status_code
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route("/goals/<int:goal_id>", methods=["PATCH"])
-def update_goal(goal_id):
-    data = request.get_json() or {}
-    try:
-        r = requests.patch(
-            f"{SUPABASE_URL}/goals?id=eq.{goal_id}",
-            headers={
-                **headers,
-                "Prefer": "return=representation"
-            },
-            json=data
-        )
-        return jsonify(r.json()), r.status_code
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route("/goals/<int:goal_id>", methods=["DELETE"])
-def delete_goal(goal_id):
-    try:
-        r = requests.delete(
-            f"{SUPABASE_URL}/goals?id=eq.{goal_id}",
-            headers=headers
-        )
-        return jsonify({"message": "Goal deleted", "status": r.status_code}), r.status_code
+        if isinstance(res_data, list) and len(res_data) > 0:
+            item = res_data[0]
+            item["title"] = item.get("goal", goal_text)
+            return jsonify(item), 200
+        return jsonify({"id": 1, "goal": goal_text, "title": goal_text}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -103,9 +75,8 @@ def delete_goal(goal_id):
 def api_chat():
     data = request.get_json() or {}
     user_prompt = data.get("message", "") or data.get("prompt", "")
-    response_text = f"Goal AI Received: {user_prompt}"
     return jsonify({
-        "response": response_text,
+        "response": f"Goal AI Received: {user_prompt}",
         "status": "success"
     }), 200
 

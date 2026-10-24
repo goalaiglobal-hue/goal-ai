@@ -1,176 +1,98 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goal AI - Gemini Dashboard</title>
+    <title>Goal AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    </style>
-    <link rel="manifest" href="/manifest.json">
-
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
-        }
-    </script>
-
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+<body class="bg-slate-950 text-white min-h-screen p-4 flex flex-col items-center">
+    <div class="w-full max-w-md space-y-4">
+        <header class="flex justify-between items-center py-4 border-b border-slate-800">
+            <h1 class="text-xl font-bold text-cyan-400">GOAL AI</h1>
+            <span class="text-xs bg-cyan-950 text-cyan-400 border border-cyan-800 px-2 py-1 rounded">Beta</span>
+        </header>
 
-    <!-- TOP HEADER -->
-    <header class="h-14 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md px-4 flex items-center justify-between sticky top-0 z-50">
-        <div class="flex items-center gap-3">
-            <button onclick="toggleSidebar()" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition lg:hidden">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-            <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-xs shadow-lg shadow-indigo-500/20">AI</div>
-                <span class="font-bold tracking-wider text-sm bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">GOAL AI</span>
-            </div>
-        </div>
-
-        <!-- GAMIFICATION BADGES -->
-        <div class="flex items-center gap-2">
-            <div id="streak-badge" class="inline-flex items-center gap-1.5 bg-amber-950/40 border border-amber-500/30 text-amber-300 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-sm">
-                <span>🔥</span> <span id="streak-count">2</span> Days
-            </div>
-            <div id="xp-badge" class="inline-flex items-center gap-1.5 bg-indigo-950/60 border border-indigo-500/40 text-indigo-300 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-sm">
-                <span>⚡</span> <span id="user-xp">0</span> XP
-            </div>
-            <div id="level-badge" class="inline-flex items-center gap-1.5 bg-purple-950/60 border border-purple-500/40 text-purple-300 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-sm">
-                <span>👑</span> Lvl <span id="user-level">1</span>
-            </div>
-            <button onclick="logout()" class="ml-1 text-xs bg-red-950/30 border border-red-500/30 text-red-300 px-3 py-1 rounded-lg hover:bg-red-900/50 transition">Logout</button>
-        </div>
-    </header>
-
-    <div class="flex-1 flex overflow-hidden">
-        <!-- SIDEBAR (ChatGPT/Gemini Style Drawer) -->
-        <aside id="sidebar" class="fixed inset-y-14 left-0 z-40 w-64 border-r border-slate-800/80 bg-slate-900/95 backdrop-blur-xl flex flex-col -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 ease-in-out">
-            <div class="p-3">
-                <button onclick="startNewChat()" class="w-full flex items-center gap-2 bg-indigo-600/20 border border-indigo-500/30 hover:bg-indigo-600/30 text-indigo-300 rounded-xl px-3 py-2 text-xs font-medium transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    New AI Goal Strategy
+        <main class="space-y-4">
+            <h2 class="text-lg font-semibold text-center">What do you want to achieve today?</h2>
+            
+            <form id="goalForm" class="flex gap-2">
+                <input type="text" id="goalInput" placeholder="Set a new goal..." required
+                    class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-cyan-500">
+                <button type="submit" class="bg-cyan-500 hover:bg-cyan-600 text-black font-semibold text-sm px-4 py-2 rounded-lg">
+                    Add
                 </button>
-            </div>
-            <div class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-4">
-                <div>
-                    <p class="text-[10px] font-semibold tracking-wider text-slate-500 uppercase px-2 mb-2">Active Goal</p>
-                    <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-2.5">
-                        <p id="active-goal-text" class="text-xs font-medium text-slate-200">Master Python in 30 Days</p>
-                    </div>
-                </div>
-            </div>
-        </aside>
+            </form>
 
-        <!-- MAIN AI CANVAS -->
-        <main class="flex-1 flex flex-col min-w-0 bg-slate-950">
-            <div id="chat-messages" class="flex-1 overflow-y-auto custom-scrollbar p-4 lg:p-6 space-y-6">
-                <div class="max-w-2xl mx-auto text-center my-8 space-y-3">
-                    <h1 class="text-2xl lg:text-3xl font-extrabold bg-gradient-to-r from-slate-100 via-indigo-200 to-slate-400 bg-clip-text text-transparent">What do you want to achieve today?</h1>
-                    <p class="text-xs text-slate-400">Ask Goal AI to generate daily action plans, build roadmaps, or refine your goals.</p>
-                </div>
-            </div>
-
-            <!-- CHAT INPUT -->
-            <div class="p-3 lg:p-4 border-t border-slate-800/80 bg-slate-900/30">
-                <div class="max-w-3xl mx-auto space-y-2">
-                    <div class="flex gap-2 overflow-x-auto pb-1 text-xs text-slate-400 no-scrollbar">
-                        <button onclick="sendQuickPrompt('Generate a 7-day action roadmap for my goal')" class="bg-slate-800/60 border border-slate-700/50 px-3 py-1 rounded-full whitespace-nowrap">🎯 7-Day Roadmap</button>
-                        <button onclick="sendQuickPrompt('Suggest 3 high-impact daily tasks')" class="bg-slate-800/60 border border-slate-700/50 px-3 py-1 rounded-full whitespace-nowrap">⚡ Quick Tasks</button>
-                    </div>
-                    <form id="chat-form" onsubmit="handleChatSubmit(event)" class="relative flex items-center">
-                        <input type="text" id="chat-input" placeholder="Ask Goal AI anything or plan your goals..." class="w-full bg-slate-900 border border-slate-700/80 text-slate-100 text-xs rounded-2xl pl-4 pr-12 py-3 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                        <button type="submit" class="absolute right-2 p-1.5 bg-indigo-600 text-white rounded-xl">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </button>
-                    </form>
-                </div>
-            </div>
+            <div id="goalsList" class="space-y-2 mt-4"></div>
         </main>
     </div>
 
     <script>
-        function toggleSidebar() { const sb = document.getElementById('sidebar'); sb.classList.toggle('-translate-x-full'); }
-        function sendQuickPrompt(text) { document.getElementById('chat-input').value = text; handleChatSubmit(new Event('submit')); }
-        async function handleChatSubmit(e) {
-            e.preventDefault();
-            const input = document.getElementById('chat-input');
-            const msg = input.value.trim();
-            if(!msg) return;
-            const chatContainer = document.getElementById('chat-messages');
-            chatContainer.innerHTML += `<div class="max-w-2xl mx-auto flex gap-3 justify-end"><div class="bg-indigo-600 text-white text-xs px-4 py-2.5 rounded-2xl">${msg}</div></div>`;
-            input.value = '';
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-            try {
-                const res = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ message: msg })
-                });
-                const data = await res.json();
-                
-                const taskId = 'task-' + Date.now();
-                chatContainer.innerHTML += `
-                    <div class="max-w-2xl mx-auto flex gap-3 items-start">
-                        <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-md shadow-indigo-600/30">AI</div>
-                        <div class="bg-slate-900 border border-slate-800 text-slate-200 text-xs px-4 py-3 rounded-2xl whitespace-pre-line space-y-3 max-w-[85%]">
-                            <p>${data.reply}</p>
-                            <div class="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
-                                <span class="text-[10px] text-indigo-400 font-semibold">+50 XP Available</span>
-                                <button id="${taskId}" onclick="completeActionTask('${taskId}')" class="bg-indigo-600/20 border border-indigo-500/40 hover:bg-indigo-600 text-indigo-300 hover:text-white px-3 py-1 rounded-lg text-[11px] font-medium transition flex items-center gap-1">
-                                    <span>⚡</span> Complete & Claim XP
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+        const goalsList = document.getElementById('goalsList');
+        const goalForm = document.getElementById('goalForm');
+        const goalInput = document.getElementById('goalInput');
 
-            } catch(err) {
-                chatContainer.innerHTML += `<p class="text-xs text-red-400 text-center">Failed to connect to Goal AI server.</p>`;
-            }
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+        function renderGoals(goals) {
+            goalsList.innerHTML = '';
+            goals.forEach(item => {
+                const text = item.goal || item.title || 'Untitled Goal';
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 border border-slate-800 p-3 rounded-lg flex justify-between items-center shadow";
+                card.innerHTML = `<span class="text-sm text-cyan-300 font-medium">${text}</span>`;
+                goalsList.appendChild(card);
+            });
         }
-        
-        let currentXP = 0;
 
-        async function addXP(amount = 50) {
+        async function loadGoals() {
+            // First load from localStorage for instant zero-flicker display
+            const savedLocal = localStorage.getItem('goal_ai_list');
+            if (savedLocal) {
+                try { renderGoals(JSON.parse(savedLocal)); } catch(e){}
+            }
+
+            // Then fetch live from server
             try {
-                const res = await fetch('/api/update-xp', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ xp: amount })
-                });
-                const data = await res.json();
-                if(data.success) {
-                    currentXP += amount;
-                    const newLevel = Math.floor(currentXP / 100) + 1;
-                    document.getElementById('user-xp').innerText = currentXP;
-                    document.getElementById('user-level').innerText = newLevel;
+                const res = await fetch('/goals');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        localStorage.setItem('goal_ai_list', JSON.stringify(data));
+                        renderGoals(data);
+                    }
                 }
-            } catch(e) {
-                console.error("XP update failed", e);
+            } catch (err) {
+                console.error("Fetch error:", err);
             }
         }
 
-        
-        async function completeActionTask(buttonId) {
-            const btn = document.getElementById(buttonId);
-            if(btn && !btn.disabled) {
-                btn.disabled = true;
-                btn.className = "bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 px-3 py-1 rounded-lg text-[11px] font-medium flex items-center gap-1 cursor-not-allowed";
-                btn.innerHTML = "<span>✅</span> Claimed +50 XP!";
-                await addXP(50);
+        goalForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = goalInput.value.trim();
+            if (!text) return;
+
+            // Immediately save locally
+            let current = [];
+            try { current = JSON.parse(localStorage.getItem('goal_ai_list')) || []; } catch(e){}
+            current.unshift({ goal: text, title: text });
+            localStorage.setItem('goal_ai_list', JSON.stringify(current));
+            renderGoals(current);
+
+            goalInput.value = '';
+
+            // Send to server
+            try {
+                await fetch('/goals', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ goal: text })
+                });
+            } catch (err) {
+                console.error("Post error:", err);
             }
-        }
-    
-        function logout() { window.location.href = '/logout'; }
+        });
+
+        window.addEventListener('DOMContentLoaded', loadGoals);
     </script>
 </body>
 </html>
