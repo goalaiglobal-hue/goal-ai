@@ -29,11 +29,17 @@ def get_goals():
         )
         data = r.json()
         if isinstance(data, list):
+            cleaned_data = []
             for item in data:
-                if "goal" in item and "title" not in item:
-                    item["title"] = item["goal"]
-                elif "title" in item and "goal" not in item:
-                    item["goal"] = item["title"]
+                text = item.get("goal") or item.get("title") or item.get("text") or "Untitled Goal"
+                cleaned_data.append({
+                    "id": item.get("id"),
+                    "goal": text,
+                    "title": text,
+                    "category": item.get("category", "General"),
+                    "progress": item.get("progress", 0)
+                })
+            return jsonify(cleaned_data), 200
         return jsonify(data), r.status_code
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -47,10 +53,7 @@ def add_goal():
         return jsonify({"error": "Goal text missing!"}), 400
 
     payload = {
-        "goal": goal_text,
-        "target_date": data.get("target_date"),
-        "category": data.get("category", "General"),
-        "progress": data.get("progress", 0)
+        "goal": goal_text
     }
 
     try:
@@ -63,10 +66,6 @@ def add_goal():
             json=payload
         )
         res_data = r.json()
-        if isinstance(res_data, list) and len(res_data) > 0:
-            res_obj = res_data[0]
-            res_obj["title"] = res_obj.get("goal", goal_text)
-            return jsonify(res_obj), r.status_code
         return jsonify(res_data), r.status_code
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -102,14 +101,9 @@ def delete_goal(goal_id):
 def api_chat():
     data = request.get_json() or {}
     user_prompt = data.get("message", "") or data.get("prompt", "")
-    
-    response_text = f"Goal created: {user_prompt}"
+    response_text = f"Goal AI Received: {user_prompt}"
     return jsonify({
         "response": response_text,
-        "reply": response_text,
-        "message": response_text,
-        "goal": user_prompt,
-        "title": user_prompt,
         "status": "success"
     }), 200
 
