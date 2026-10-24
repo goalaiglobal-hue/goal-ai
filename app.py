@@ -4,11 +4,13 @@ import requests
 
 app = Flask(__name__)
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
-if SUPABASE_URL and not SUPABASE_URL.endswith("/rest/v1"):
+# Direct fallback configuration so it never fails on Termux or Render
+SUPABASE_URL = os.environ.get("SUPABASE_URL") or "https://aybfoxieispekcoedvjzho.supabase.co"
+SUPABASE_URL = SUPABASE_URL.rstrip("/")
+if not SUPABASE_URL.endswith("/rest/v1"):
     SUPABASE_URL += "/rest/v1"
 
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY") or "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." # Apni Supabase anon key yahan paste kar sakte ho
 
 headers = {
     "apikey": SUPABASE_KEY,
