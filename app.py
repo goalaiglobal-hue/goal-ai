@@ -27,18 +27,27 @@ def get_goals():
             f"{SUPABASE_URL}/goals?select=*",
             headers=headers
         )
-        return jsonify(r.json()), r.status_code
+        data = r.json()
+        if isinstance(data, list):
+            for item in data:
+                if "goal" in item and "title" not in item:
+                    item["title"] = item["goal"]
+                elif "title" in item and "goal" not in item:
+                    item["goal"] = item["title"]
+        return jsonify(data), r.status_code
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route("/goals", methods=["POST"])
 def add_goal():
-    data = request.get_json()
-    if not data or not data.get("goal"):
+    data = request.get_json() or {}
+    goal_text = data.get("goal") or data.get("title") or data.get("message")
+    
+    if not goal_text:
         return jsonify({"error": "Goal text missing!"}), 400
 
     payload = {
-        "goal": data["goal"],
+        "goal": goal_text,
         "target_date": data.get("target_date"),
         "category": data.get("category", "General"),
         "progress": data.get("progress", 0)
@@ -53,13 +62,18 @@ def add_goal():
             },
             json=payload
         )
-        return jsonify(r.json()), r.status_code
+        res_data = r.json()
+        if isinstance(res_data, list) and len(res_data) > 0:
+            res_obj = res_data[0]
+            res_obj["title"] = res_obj.get("goal", goal_text)
+            return jsonify(res_obj), r.status_code
+        return jsonify(res_data), r.status_code
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route("/goals/<int:goal_id>", methods=["PATCH"])
 def update_goal(goal_id):
-    data = request.get_json()
+    data = request.get_json() or {}
     try:
         r = requests.patch(
             f"{SUPABASE_URL}/goals?id=eq.{goal_id}",
@@ -84,15 +98,20 @@ def delete_goal(goal_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Fix for Frontend /api/chat call
 @app.route("/api/chat", methods=["POST"])
 def api_chat():
     data = request.get_json() or {}
-    user_prompt = data.get("message", "")
+    user_prompt = data.get("message", "") or data.get("prompt", "")
     
-    # Simple response or pass-through
-    response_text = f"Goal AI Received: {user_prompt}. Plan generated successfully!"
-    return jsonify({"response": response_text, "status": "success"}), 200
+    response_text = f"Goal created: {user_prompt}"
+    return jsonify({
+        "response": response_text,
+        "reply": response_text,
+        "message": response_text,
+        "goal": user_prompt,
+        "title": user_prompt,
+        "status": "success"
+    }), 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
