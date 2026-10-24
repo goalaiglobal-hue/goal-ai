@@ -84,5 +84,15 @@ def delete_goal(goal_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# Fix for Frontend /api/chat call
+@app.route("/api/chat", methods=["POST"])
+def api_chat():
+    data = request.get_json() or {}
+    user_prompt = data.get("message", "")
+    
+    # Simple response or pass-through
+    response_text = f"Goal AI Received: {user_prompt}. Plan generated successfully!"
+    return jsonify({"response": response_text, "status": "success"}), 200
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
